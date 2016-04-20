@@ -10,6 +10,8 @@ public class GameMasterObject : MonoBehaviour
 	public static int currentLevel;
 	public int level1, level2, level3, level4, level5, level6, level7, level8, level9, level10;
 	public float amountOfTimeToDisplay = 10f;
+	public int currentLevelCompare = -1;
+	public static bool levelAlreadyShown = false;
 	private SpawnEnemies1 spawnEm;
 
 	public static bool getDannyInfo;
@@ -551,6 +553,7 @@ public class GameMasterObject : MonoBehaviour
 
 	private void Update()
 	{
+		Debug.Log (currentLevel);
 		if (this.player != null)
 		{
 			GameMasterObject.playerUse = this.player;
@@ -637,6 +640,7 @@ public class GameMasterObject : MonoBehaviour
 			}
 			if (GameMasterObject.statusEffect)
 			{
+				LevelUp ();
 				if (Input.GetAxis("Primary") > 0f && this.switchChars)
 				{
 					this.SwitchToStrongMan();
@@ -745,6 +749,7 @@ public class GameMasterObject : MonoBehaviour
 			}
 			if (GameMasterObject.statusEffect)
 			{
+				LevelUp ();
 				if (Input.GetAxis("Primary") > 0f && this.switchChars)
 				{
 					this.SwitchToDan();
@@ -1114,55 +1119,96 @@ public class GameMasterObject : MonoBehaviour
 
 	public void LevelUp()
 	{		
-		if(HUDEXP.currentEXP >= level1 && currentLevel < level2)
+		Debug.Log ("level up");
+		if(HUDEXP.currentEXP >= level1 && HUDEXP.currentEXP < level2)
 		{
 			currentLevel = 1;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level2 && currentLevel < level3)
+		else if(HUDEXP.currentEXP >= level2 && HUDEXP.currentEXP < level3)
 		{
 			currentLevel = 2;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level3 && currentLevel < level4)
+		else if(HUDEXP.currentEXP >= level3 && HUDEXP.currentEXP < level4)
 		{
 			currentLevel = 3;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level4 && currentLevel < level5)
+		else if(HUDEXP.currentEXP >= level4 && HUDEXP.currentEXP < level5)
 		{
 			currentLevel = 4;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level5 && currentLevel < level6)
+		else if(HUDEXP.currentEXP >= level5 && HUDEXP.currentEXP < level6)
 		{
 			currentLevel = 5;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level6 && currentLevel < level7)
+		else if(HUDEXP.currentEXP >= level6 && HUDEXP.currentEXP < level7)
 		{
 			currentLevel = 6;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level7 && currentLevel < level8)
+		else if(HUDEXP.currentEXP >= level7 && HUDEXP.currentEXP < level8)
 		{
 			currentLevel = 7;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level8 && currentLevel < level9)
+		else if(HUDEXP.currentEXP >= level8 && HUDEXP.currentEXP < level9)
 		{
 			currentLevel = 8;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level9 && currentLevel < level10)
+		else if(HUDEXP.currentEXP >= level9 && HUDEXP.currentEXP < level10)
 		{
 			currentLevel = 9;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
-		else if(HUDEXP.currentEXP  >= level10)
+		else if(HUDEXP.currentEXP >= level10)
 		{
 			currentLevel = 10;
-			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+			if (currentLevel != currentLevelCompare) 
+			{
+				HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+				currentLevelCompare = currentLevel;
+			}
 		}
 	}
 }
