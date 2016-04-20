@@ -9,6 +9,7 @@ public class GameMasterObject : MonoBehaviour
 	public GameObject enemyManager;
 	public static int currentLevel;
 	public int level1, level2, level3, level4, level5, level6, level7, level8, level9, level10;
+	public float amountOfTimeToDisplay = 10f;
 	private SpawnEnemies1 spawnEm;
 
 	public static bool getDannyInfo;
@@ -1105,6 +1106,60 @@ public class GameMasterObject : MonoBehaviour
 		if (this.miniMap != null)
 		{
 			this.miniMap.SetActive(!HUDToggleMinimap.hudOnOrOff);
+		}
+	}
+
+	public void LevelUp()
+	{		
+		if(currentLevel >= level1 && currentLevel < level2)
+		{
+			currentLevel = 1;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level2 && currentLevel < level3)
+		{
+			currentLevel = 2;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level3 && currentLevel < level4)
+		{
+			currentLevel = 3;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level4 && currentLevel < level5)
+		{
+			currentLevel = 4;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level5 && currentLevel < level6)
+		{
+			currentLevel = 5;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level6 && currentLevel < level7)
+		{
+			currentLevel = 6;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level7 && currentLevel < level8)
+		{
+			currentLevel = 7;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level8 && currentLevel < level9)
+		{
+			currentLevel = 8;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level9 && currentLevel < level10)
+		{
+			currentLevel = 9;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
+		}
+		else if(currentLevel >= level10)
+		{
+			currentLevel = 10;
+			HUDLevelDisplay.levelUpTimer = amountOfTimeToDisplay;
 		}
 	}
 }
