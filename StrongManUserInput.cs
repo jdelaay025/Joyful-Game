@@ -10,6 +10,7 @@ public class StrongManUserInput : MonoBehaviour
 	public Transform leftHandSpawn;
 	public AudioSource sound;
 //	public GameObject powerCircle;
+	public bool editorCheatCode = false;
 
 	public Color goColor = new Color(0f, 1f, 0f, 1f);
 	public Color notEquipedColor = new Color(0f, 0f, 0f, 1f);
@@ -222,14 +223,15 @@ public class StrongManUserInput : MonoBehaviour
 				weaponsHot = false;
 				platformNow = true;
 			}
-			if(Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && playerHealth.hasRage && playerHealth.infiniteRage)
+			if(Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && playerHealth.hasRage && playerHealth.infiniteRage  || 
+				Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && editorCheatCode)
 			{
 				weaponsHot = false;
 				platformNow = true;
 				rageSource.PlayOneShot (rageChargeUp);
 				CameraShake.InstanceSM1.ShakeSM1 (amplitude, duration);							
 			}
-			if(Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && playerHealth.infiniteRage)
+			if(Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1)
 			{
 				weaponsHot = true;
 				platformNow = false;
@@ -273,7 +275,15 @@ public class StrongManUserInput : MonoBehaviour
 				weaponsHot = false;
 				platformNow = true;
 			}
-			if(Input.GetAxisRaw("Primary2") < 0 && !GameMasterObject.statusEffect)
+			if(Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && playerHealth.hasRage && playerHealth.infiniteRage || 
+				Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && editorCheatCode)
+			{
+				weaponsHot = false;
+				platformNow = true;
+				rageSource.PlayOneShot (rageChargeUp);
+				CameraShake.InstanceSM1.ShakeSM1 (amplitude, duration);							
+			}
+			if(Input.GetAxisRaw("Primary2") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1)
 			{
 				weaponsHot = true;
 				platformNow = false;
@@ -633,7 +643,7 @@ public class StrongManUserInput : MonoBehaviour
 			move.Normalize ();
 		if(Input.GetAxis("Secondary") < 0 || Input.GetAxisRaw("Secondary2") < 0 && !HUDJoystick_Keyboard.joystickOrKeyboard)
 		{
-			anim.SetBool ("Shoot", true);
+			//anim.SetBool ("Shoot", true);
 			rocksBeingPulled.Stop ();
 			currentlyShooting = false;
 			walkToogle = false;
@@ -693,10 +703,8 @@ public class StrongManUserInput : MonoBehaviour
 		{
 			anim.SetBool("RageDash", true);
 			rageDash = true;
-			usingPower = true;
 			dashSound.volume = Mathf.Lerp(0, dashVolume, 0.3f);
 		}
-
 		else 
 		{
 			anim.SetBool("Dash", false);
@@ -706,7 +714,6 @@ public class StrongManUserInput : MonoBehaviour
 			usingPower = false;
 			dashSound.volume = 0;
 		}
-
 
 		if(Input.GetButtonDown("Melee") && meleeEnabled && !aim && meleeTimer >= meleeTimerPoint && !findEnemyTarget && !headedTo)
 		{
