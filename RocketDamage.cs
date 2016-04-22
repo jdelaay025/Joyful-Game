@@ -27,7 +27,6 @@ public class RocketDamage : MonoBehaviour
 
 	void Awake () 
 	{			
-		
 		myTransform = transform;
 		sound = GetComponent<AudioSource>();
 		attackDamage = Random.Range(750, 1500);
@@ -43,21 +42,38 @@ public class RocketDamage : MonoBehaviour
 		} 
 		else if (GameMasterObject.isFinalLevel && GameMasterObject.dragon != null) 
 		{
-			target = GameMasterObject.dragon.GetComponentInChildren<SphereCollider> ().transform;
+			if (!GameMasterObject.dragon.GetComponent<EnemyHealth1> ().isDead) 
+			{
+				target = GameMasterObject.dragon.GetComponentInChildren<SphereCollider> ().transform;
+			} 
+			else 
+			{
+				target = null;
+			}
 		} 
 		else 
 		{
 			target = null;
 		}
 
-
 		//timer = 10f;
 	}
 
 	void Update () 
 	{
-		target = GameMasterObject.playerUse.transform;
-		distFromPlayer = Vector3.Distance (target.position, myTransform.position);
+		if(!GameMasterObject.isFinalLevel)
+		{
+			target = GameMasterObject.playerUse.transform;
+		}
+//		else if(GameMasterObject.isFinalLevel)
+//		{
+//			GameMasterObject.dragon.transform;
+//		}
+		if(target != null)
+		{
+			distFromPlayer = Vector3.Distance (target.position, myTransform.position);
+		}
+
 		if(destroyThis)
 		{
 			Instantiate (explosion, transform.position, transform.rotation);
@@ -91,17 +107,15 @@ public class RocketDamage : MonoBehaviour
 		if(!GameMasterObject.isFinalLevel && target != null)
 		{
 			rotPoint = Quaternion.LookRotation (target.position + new Vector3(0f, 6f, 0f) - myTransform.position);
+			lookingAt = Quaternion.Slerp (myTransform.rotation, rotPoint, rotationSpeed * Time.deltaTime);
 		}
 		else if(GameMasterObject.isFinalLevel && target != null)
 		{
 			rotPoint = Quaternion.LookRotation (target.position + new Vector3(0f, 20f, 0f) - myTransform.position);
+			lookingAt = Quaternion.Slerp (myTransform.rotation, rotPoint, rotationSpeed * Time.deltaTime);
 		}
-//		dist = Vector3.Distance (target.position, myTransform.position);
-
-		lookingAt = Quaternion.Slerp (myTransform.rotation, rotPoint, rotationSpeed * Time.deltaTime);
 	
 		myTransform.rotation = lookingAt;
-
 
 		transform.position += transform.forward * Time.deltaTime * movementSpeed;
 	}

@@ -102,6 +102,7 @@ public class PersistThroughScenes : MonoBehaviour
 			strongmanActive = GameMasterObject.strongmanActive;
 		}
 		currentGold = HUDCurrency.currentGold;
+		currentEXP = HUDEXP.currentEXP;
 	}
 	public void ResetAllValues()
 	{

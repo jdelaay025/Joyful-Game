@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class StrongManItemPickup : MonoBehaviour 
 {
 	public int exp = 0;
 	public int gold = 0;
-
+	public Text armoredUpText;
 	public int healthBoost;
 
 	//particle systems for collecting gold
@@ -44,6 +45,14 @@ public class StrongManItemPickup : MonoBehaviour
 		}	
 
 		currentBoost = playerHealth.startingHealth * 5;
+		if(armorUp)
+		{
+			armoredUpText.enabled = true;
+		}
+		else if(!armorUp)
+		{
+			armoredUpText.enabled = false;
+		}
 	}
 
 	void OnTriggerEnter(Collider onIt)

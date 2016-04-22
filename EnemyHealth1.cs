@@ -33,7 +33,7 @@ public class EnemyHealth1 : MonoBehaviour
 	AudioSource enemyAudio;
 	ParticleSystem hitParticles;
 	//CapsuleCollider capsulecollider;												//this is for Zombie enemies
-	bool isDead;
+	public bool isDead;
 
 	void Awake () 
 	{

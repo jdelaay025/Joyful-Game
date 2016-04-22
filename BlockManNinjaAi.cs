@@ -113,8 +113,6 @@ public class BlockManNinjaAi : MonoBehaviour
 			}
 		}
 
-
-
 		if(timer < timeBetweenAttacks)
 		{
 			timer += Time.deltaTime;

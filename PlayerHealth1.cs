@@ -6,11 +6,15 @@ using UnityEngine.Networking;
 
 public class PlayerHealth1 : MonoBehaviour 
 {
+	public bool editorCheatCode = false;
+	public int currentLevel = 0;
 	public int startingHealth = 1000;
 	public int healthLevelUp = 1;
 	public int maxHealth;
 	public float currentHealth;
 	public Slider healthSlider;
+	public Slider armorHealthSlider;
+	public Slider healthGaugeSlider;
 	public int startingPower = 1000;
 	public int maxPower;
 	public int currentPower;
@@ -95,7 +99,8 @@ public class PlayerHealth1 : MonoBehaviour
 		GameMasterObject.currentGaugeHealth = currentHealth;
 		damageImage = GameMasterObject.damageImage;
 
-		healthSlider = HUDHealthScript.healthSlider;
+//		healthSlider = HUDHealthScript.healthSlider;
+//		healthGaugeSlider = HUDHealthScript.healthGaugeSlider;
 		powerSlider = HUDPowerScript.powerSlider;
 		rageMeter = RageSlider.rageSlider;
 		whichOutfit = HUDOutfitChange.outfitNumber;
@@ -103,10 +108,19 @@ public class PlayerHealth1 : MonoBehaviour
 
 	void Update () 
 	{
+//		Debug.Log (GameMasterObject.currentLevel);
+//		Debug.Log (rageDrain);
+		currentLevel = GameMasterObject.currentLevel;
 		whichOutfit = HUDOutfitChange.outfitNumber;
-		if(dannyActive)
+		editorCheatCode = HUDToggleCheat.cheatOnOrOff;
+		if(GameMasterObject.currentLevel >= 5 && !editorCheatCode)
+		{
+			infiniteRage = true;
+		}
+		if(dannyActive && !strongmanActive)
 		{
 			regMat = possibleMats [whichOutfit - 1];
+			rend.material = regMat;
 		}
 		if(rageCount >= maxRageCount)
 		{
@@ -135,7 +149,16 @@ public class PlayerHealth1 : MonoBehaviour
 			{
 				rage = true;
 			}
-			if(Input.GetButtonDown("Melee Weapon") && infiniteRage)
+			if(Input.GetButtonDown("Melee Weapon") && infiniteRage || 
+				Input.GetButtonDown("Melee Weapon") && infiniteRage && !HUDJoystick_Keyboard.joystickOrKeyboard)
+			{
+				rage = true;
+				if(sUinput != null)
+				{
+					sUinput.platformNow = true;
+				}
+			}
+			if(Input.GetButtonDown("Melee Weapon") && editorCheatCode || Input.GetButtonDown("Melee Weapon") && editorCheatCode && !HUDJoystick_Keyboard.joystickOrKeyboard)
 			{
 				rage = true;
 				if(sUinput != null)
@@ -160,13 +183,86 @@ public class PlayerHealth1 : MonoBehaviour
 					sUinput.platformNow = true;
 				}
 			}
-
+		}
+		else if(!hasRage)
+		{
+			if(Input.GetButtonDown("Melee Weapon") && !infiniteRage || 
+				Input.GetButtonDown("Melee Weapon") && !infiniteRage && !HUDJoystick_Keyboard.joystickOrKeyboard)
+			{
+//				Debug.Log ("hit");
+				if(sUinput != null)
+				{
+					sUinput.platformNow = true;
+				}
+			}
 		}
 
 		dannyActive = GameMasterObject.dannyActive;
 		strongmanActive = GameMasterObject.strongmanActive;
-		if(!dannyActive)
-		{
+		if(!dannyActive && strongmanActive)
+		{		
+			rageMeter.value = rageCount;
+			if(currentLevel == 0 && !editorCheatCode)
+			{
+				rageDrain = 20;
+				infiniteRage = false;
+			}
+			if(currentLevel == 1 && !editorCheatCode)
+			{
+				rageDrain = 18;
+				infiniteRage = false;
+			}
+			else if(currentLevel == 2 && !editorCheatCode)
+			{
+				rageDrain = 12;
+				infiniteRage = false;
+			}
+			else if(currentLevel == 3 && !editorCheatCode)
+			{
+				rageDrain = 5;
+				infiniteRage = false;
+			}
+			else if(currentLevel == 4 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(currentLevel == 5 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(currentLevel == 6 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(currentLevel == 7 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(currentLevel == 8 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(currentLevel == 9 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(currentLevel == 10 && !editorCheatCode)
+			{
+				rageDrain = 0;
+				infiniteRage = true;
+			}
+			else if(editorCheatCode)
+			{
+				rageCount = 100;
+				rageDrain = 0;
+				infiniteRage = true;
+			}
 			if(invulnerable && !rage)
 			{
 				//			rend.material.color = Color.black;
@@ -184,11 +280,6 @@ public class PlayerHealth1 : MonoBehaviour
 				rageLight.enabled = true;
 			}	
 		}
-		else if(dannyActive)
-		{
-			rend.material = regMat;
-		}
-
 
 		healthLevelUp = HUDHealthBooster.healthAmount;
 
@@ -197,12 +288,11 @@ public class PlayerHealth1 : MonoBehaviour
 
 		powerSlider.value = currentPower;
 		healthSlider.value = currentHealth;
+		armorHealthSlider.value = currentHealth;
+		healthGaugeSlider.value = currentHealth;
 		healthSlider.maxValue = maxHealth;
+		healthGaugeSlider.maxValue = maxHealth;
 		powerSlider.maxValue = maxPower;
-		if(strongmanActive)
-		{
-			rageMeter.value = rageCount;
-		}
 		GameMasterObject.maxGaugeHealth = startingHealth;
 		GameMasterObject.currentGaugeHealth = currentHealth;
 
@@ -257,7 +347,7 @@ public class PlayerHealth1 : MonoBehaviour
 		{
 			countPower = (float)startingPower;
 		}
-		if(UserInput.usingPower && hasPower && !DannyWeaponScript.blazeSwordActiveNow)
+		if(UserInput.usingPower && hasPower && !DannyWeaponScript.blazeSwordActiveNow || StrongManUserInput.usingPower && hasPower && !rage)
 		{
 			countPower -= Time.deltaTime * powerUsage;
 		}
@@ -287,6 +377,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentHealth -= amount;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 //			playerAudio.Play ();
 			/*if(charMove != null)
 			{
@@ -320,6 +412,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentHealth -= amount;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 //			playerAudio.Play ();
 			if(!rage)
 			{
@@ -345,6 +439,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentHealth -= amount * poisonEffects;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 			/*if(charMove != null)
 			{
 				SMDamageCamShake.InstanceSM2.ShakeSM2 (amplitude, duration);			
@@ -372,6 +468,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentHealth -= amount * poisonEffects;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 			/*if(charMove != null)
 			{
 				SMDamageCamShake.InstanceSM2.ShakeSM2 (amplitude, duration);
@@ -401,6 +499,8 @@ public class PlayerHealth1 : MonoBehaviour
 	{
 		HUDHealthText.currentNumHealth = currentHealth;
 		healthSlider.value = 0;
+		armorHealthSlider.value = 0;
+		healthGaugeSlider.value = 0;
 		isDead = true;
 		gameObject.tag = "DEFEATED";
 		poisoned = false;
@@ -455,6 +555,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 			rage = false;
 			rageCount = 50;
 			dannyMovement.enabled = true;
@@ -474,6 +576,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 			rage = false;
 			rageCount = 50;
 			charMove.enabled = true;
@@ -496,6 +600,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 			dannyMovement.enabled = true;
 			dannyWeapons.enabled = true;
 			poisoned = false;
@@ -516,6 +622,8 @@ public class PlayerHealth1 : MonoBehaviour
 			currentPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
+			armorHealthSlider.value = currentHealth;
+			healthGaugeSlider.value = currentHealth;
 			charMove.enabled = true;
 			poisoned = false;
 			poisonEffects = 1;

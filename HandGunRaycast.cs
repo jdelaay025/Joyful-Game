@@ -124,8 +124,6 @@ public class HandGunRaycast : MonoBehaviour
 			attackBooster = 50;
 		}
 
-
-
 		if (reloading) 
 		{
 			if(reloadTimer <= reloadDelay)

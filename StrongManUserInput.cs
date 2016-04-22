@@ -200,6 +200,7 @@ public class StrongManUserInput : MonoBehaviour
 	{	
 //		Debug.Log (cameraGO);
 //		shootAt = Quaternion.Lerp(cam.rotation, Quaternion.Euler(180f, 0f, 0f),shootRotationOffset);
+		editorCheatCode = HUDToggleCheat.cheatOnOrOff;
 		if(takeOffTimer <= 2f)
 		{
 			takeOffTimer += Time.deltaTime;
@@ -223,7 +224,7 @@ public class StrongManUserInput : MonoBehaviour
 				weaponsHot = false;
 				platformNow = true;
 			}
-			if(Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && playerHealth.hasRage && playerHealth.infiniteRage  || 
+			if(Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && playerHealth.hasRage && playerHealth.infiniteRage || 
 				Input.GetButtonDown("Melee Weapon") && !GameMasterObject.statusEffect && editorCheatCode)
 			{
 				weaponsHot = false;
@@ -231,7 +232,8 @@ public class StrongManUserInput : MonoBehaviour
 				rageSource.PlayOneShot (rageChargeUp);
 				CameraShake.InstanceSM1.ShakeSM1 (amplitude, duration);							
 			}
-			if(Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1)
+			if(Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1 ||
+				Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && editorCheatCode)
 			{
 				weaponsHot = true;
 				platformNow = false;
@@ -283,7 +285,8 @@ public class StrongManUserInput : MonoBehaviour
 				rageSource.PlayOneShot (rageChargeUp);
 				CameraShake.InstanceSM1.ShakeSM1 (amplitude, duration);							
 			}
-			if(Input.GetAxisRaw("Primary2") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1)
+			if(Input.GetAxisRaw("Primary2") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1 ||
+				Input.GetAxisRaw("Primary2") < 0 && !GameMasterObject.statusEffect && editorCheatCode)
 			{
 				weaponsHot = true;
 				platformNow = false;

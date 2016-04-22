@@ -214,9 +214,10 @@ public class GameMasterObject : MonoBehaviour
 	private PlayerHealth1 strongmanPlayerHealth;
 
 	private MyHealthScript myHealth;
-
-	[SerializeField]
-	private HUDHealthText textHealth;
+//	[SerializeField]
+//	private DannyHUDHealthText dTextHealth;
+//	[SerializeField]
+//	private HUDHealthText textHealth;
 
 	[SerializeField]
 	private UserInput userInput;
@@ -291,7 +292,6 @@ public class GameMasterObject : MonoBehaviour
 		this.enemyManager = GameObject.Find("EnemyManagerCorrected");
 		this.persistentobj = GameObject.Find("PersistThroughScenes");
 		this.spawnEm = this.enemyManager.GetComponent<SpawnEnemies1>();
-		this.textHealth = this.healthText.GetComponent<HUDHealthText>();
 		if (this.persistentobj != null)
 		{
 			this.persistScript = this.persistentobj.GetComponent<PersistThroughScenes>();
@@ -332,8 +332,8 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.danny;
 				GameMasterObject.playerUse = this.danny;
 				this.playerHealth = this.dannyPlayerHealth;
-				this.textHealth.dannyActive = true;
-				this.textHealth.strongmanActive = false;
+//				this.dTextHealth.dannyActive = true;
+//				this.dTextHealth.strongmanActive = false;
 				this.strongmanCam.position = this.player.transform.position;
 				this.dannyEquipPanel.SetActive(true);
 				this.strongmanEquipPanel.SetActive(false);
@@ -349,13 +349,12 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.strongman;
 				GameMasterObject.playerUse = this.strongman;
 				this.playerHealth = this.strongmanPlayerHealth;
-				this.textHealth.strongmanActive = true;
-				this.textHealth.dannyActive = false;
+//				this.textHealth.strongmanActive = true;
+//				this.textHealth.dannyActive = false;
 				this.dannyCam.position = this.player.transform.position;
 				this.strongmanEquipPanel.SetActive(true);
 				this.dannyEquipPanel.SetActive(false);
-			}
-			this.textHealth.playerHealth = this.playerHealth;
+			}		
 		}
 		else if (SceneManager.GetActiveScene().name == "FallIn")
 		{
@@ -386,9 +385,8 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.danny;
 				GameMasterObject.playerUse = this.danny;
 				this.playerHealth = this.dannyPlayerHealth;
-				this.textHealth.playerHealth = this.playerHealth;
-				this.textHealth.dannyActive = true;
-				this.textHealth.strongmanActive = false;
+//				this.dTextHealth.dannyActive = true;
+//				this.dTextHealth.strongmanActive = false;
 				this.strongmanCam.position = this.player.transform.position;
 				this.dannyEquipPanel.SetActive(true);
 				this.strongmanEquipPanel.SetActive(false);
@@ -404,9 +402,8 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.strongman;
 				GameMasterObject.playerUse = this.strongman;
 				this.playerHealth = this.strongmanPlayerHealth;
-				this.textHealth.playerHealth = this.playerHealth;
-				this.textHealth.strongmanActive = true;
-				this.textHealth.dannyActive = false;
+//				this.textHealth.strongmanActive = true;
+//				this.textHealth.dannyActive = false;
 				this.dannyCam.position = this.player.transform.position;
 				this.strongmanEquipPanel.SetActive(true);
 				this.dannyEquipPanel.SetActive(false);
@@ -439,9 +436,8 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.danny;
 				GameMasterObject.playerUse = this.danny;
 				this.playerHealth = this.dannyPlayerHealth;
-				this.textHealth.playerHealth = this.playerHealth;
-				this.textHealth.dannyActive = true;
-				this.textHealth.strongmanActive = false;
+//				this.dTextHealth.dannyActive = true;
+//				this.dTextHealth.strongmanActive = false;
 				this.strongmanCam.position = this.player.transform.position;
 				this.dannyEquipPanel.SetActive(true);
 				this.strongmanEquipPanel.SetActive(false);
@@ -457,9 +453,8 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.strongman;
 				GameMasterObject.playerUse = this.strongman;
 				this.playerHealth = this.strongmanPlayerHealth;
-				this.textHealth.playerHealth = this.playerHealth;
-				this.textHealth.strongmanActive = true;
-				this.textHealth.dannyActive = false;
+//				this.textHealth.strongmanActive = true;
+//				this.textHealth.dannyActive = false;
 				this.dannyCam.position = this.player.transform.position;
 				this.strongmanEquipPanel.SetActive(true);
 				this.dannyEquipPanel.SetActive(false);
@@ -497,8 +492,8 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.danny;
 				GameMasterObject.playerUse = this.danny;
 				this.playerHealth = this.dannyPlayerHealth;
-				this.textHealth.dannyActive = true;
-				this.textHealth.strongmanActive = false;
+//				this.dTextHealth.dannyActive = true;
+//				this.dTextHealth.strongmanActive = false;
 				this.strongmanCam.position = this.player.transform.position;
 				this.dannyEquipPanel.SetActive(true);
 				this.strongmanEquipPanel.SetActive(false);
@@ -514,15 +509,14 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.strongman;
 				GameMasterObject.playerUse = this.strongman;
 				this.playerHealth = this.strongmanPlayerHealth;
-				this.textHealth.strongmanActive = true;
-				this.textHealth.dannyActive = false;
+//				this.textHealth.strongmanActive = true;
+//				this.textHealth.dannyActive = false;
 				this.dannyCam.position = this.player.transform.position;
 				this.strongmanEquipPanel.SetActive(true);
 				this.dannyEquipPanel.SetActive(false);
 			}
 			if (this.playerHealth != null)
 			{
-				this.textHealth.playerHealth = this.playerHealth;
 			}
 		}
 		GameMasterObject.targets = new System.Collections.Generic.List<Transform>();
@@ -543,7 +537,6 @@ public class GameMasterObject : MonoBehaviour
 		GameMasterObject.enemiesToDestroy = new System.Collections.Generic.List<GameObject>();
 		GameMasterObject.ragDollsToDestroy = new System.Collections.Generic.List<GameObject>();
 		GameMasterObject.tcSpawnersToDestroy = new System.Collections.Generic.List<GameObject>();
-		this.textHealth = this.healthText.GetComponent<HUDHealthText>();
 	}
 
 	private void Start()
@@ -553,7 +546,7 @@ public class GameMasterObject : MonoBehaviour
 
 	private void Update()
 	{
-		Debug.Log (currentLevel);
+//		Debug.Log (currentLevel);
 		if (this.player != null)
 		{
 			GameMasterObject.playerUse = this.player;
@@ -600,13 +593,12 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.danny;
 			}
 			this.playerHealth = this.dannyPlayerHealth;
-			this.textHealth.dannyActive = true;
-			this.textHealth.strongmanActive = false;
+//			this.textHealth.dannyActive = true;
+//			this.textHealth.strongmanActive = false;
 			if (this.strongmanCam != null)
 			{
 				this.strongmanCam.position = this.player.transform.position;
 			}
-			this.textHealth.playerHealth = this.playerHealth;
 			if (this.statusTimer > 0f && !GameMasterObject.isMultiplayer)
 			{
 				this.statusTimer -= Time.deltaTime;
@@ -709,13 +701,12 @@ public class GameMasterObject : MonoBehaviour
 				this.player = this.strongman;
 			}
 			this.playerHealth = this.strongmanPlayerHealth;
-			this.textHealth.strongmanActive = true;
-			this.textHealth.dannyActive = false;
+//			this.textHealth.strongmanActive = true;
+//			this.textHealth.dannyActive = false;
 			if (this.dannyCam != null)
 			{
 				this.dannyCam.position = this.player.transform.position;
 			}
-			this.textHealth.playerHealth = this.playerHealth;
 			if (this.statusTimer > 0f && !GameMasterObject.isMultiplayer)
 			{
 				this.statusTimer -= Time.deltaTime;
@@ -907,7 +898,6 @@ public class GameMasterObject : MonoBehaviour
 			GameMasterObject.dannyActive = true;
 			GameMasterObject.strongmanActive = false;
 			this.player = this.danny;
-			this.textHealth.playerHealth = this.playerHealth;
 			MechAi.player = this.danny;
 			MechAi.target = this.danny.transform;
 			if (!GameMasterObject.isFinalLevel)
@@ -918,11 +908,10 @@ public class GameMasterObject : MonoBehaviour
 			BlockManAiScript.player = this.danny;
 			BlockManAiScriptlv2.player = this.danny;
 			BlockManNinjaAi.player = this.danny;
-			this.textHealth.strongmanActive = false;
+//			this.textHealth.strongmanActive = false;
 			this.dannyEquipPanel.SetActive(true);
 			this.strongmanEquipPanel.SetActive(false);
-			this.textHealth.dannyActive = true;
-			this.textHealth.playerHealth = this.playerHealth;
+//			this.textHealth.dannyActive = true;
 		}
 		if (SceneManager.GetActiveScene().name == "CapMultiplayer")
 		{
@@ -934,7 +923,6 @@ public class GameMasterObject : MonoBehaviour
 			GameMasterObject.dannyActive = true;
 			GameMasterObject.strongmanActive = false;
 			this.player = GameMasterObject.dannyNetwork;
-			this.textHealth.playerHealth = this.playerHealth;
 			MechAi.player = GameMasterObject.dannyNetwork;
 			MechAi.target = GameMasterObject.dannyNetwork.transform;
 			if (!GameMasterObject.isFinalLevel)
@@ -945,11 +933,10 @@ public class GameMasterObject : MonoBehaviour
 			BlockManAiScript.player = GameMasterObject.dannyNetwork;
 			BlockManAiScriptlv2.player = GameMasterObject.dannyNetwork;
 			BlockManNinjaAi.player = GameMasterObject.dannyNetwork;
-			this.textHealth.strongmanActive = false;
+//			this.textHealth.strongmanActive = false;
 			GameMasterObject.dannyNetworkEquipPanel.SetActive(true);
 			GameMasterObject.strongmanNetworkEquipPanel.SetActive(false);
-			this.textHealth.dannyActive = true;
-			this.textHealth.playerHealth = this.playerHealth;
+//			this.textHealth.dannyActive = true;
 		}
 	}
 
@@ -977,9 +964,8 @@ public class GameMasterObject : MonoBehaviour
 			BlockManAiScript.player = this.strongman;
 			BlockManAiScriptlv2.player = this.strongman;
 			BlockManNinjaAi.player = this.strongman;
-			this.textHealth.strongmanActive = true;
-			this.textHealth.dannyActive = false;
-			this.textHealth.playerHealth = this.playerHealth;
+//			this.textHealth.strongmanActive = true;
+//			this.textHealth.dannyActive = false;
 			this.strongmanEquipPanel.SetActive(true);
 			this.dannyEquipPanel.SetActive(false);
 			BlockManAiScript.switchPlayer = true;
@@ -1006,9 +992,8 @@ public class GameMasterObject : MonoBehaviour
 			BlockManAiScript.player = GameMasterObject.strongmanNetwork;
 			BlockManAiScriptlv2.player = GameMasterObject.strongmanNetwork;
 			BlockManNinjaAi.player = GameMasterObject.strongmanNetwork;
-			this.textHealth.strongmanActive = true;
-			this.textHealth.dannyActive = false;
-			this.textHealth.playerHealth = this.playerHealth;
+//			this.textHealth.strongmanActive = true;
+//			this.textHealth.dannyActive = false;
 			GameMasterObject.strongmanNetworkEquipPanel.SetActive(true);
 			GameMasterObject.dannyNetworkEquipPanel.SetActive(false);
 			BlockManAiScript.switchPlayer = true;
@@ -1032,8 +1017,8 @@ public class GameMasterObject : MonoBehaviour
 			this.player = GameMasterObject.dannyNetwork;
 			GameMasterObject.playerUse = GameMasterObject.dannyNetwork;
 			this.playerHealth = this.dannyPlayerHealth;
-			this.textHealth.dannyActive = true;
-			this.textHealth.strongmanActive = false;
+//			this.textHealth.dannyActive = true;
+//			this.textHealth.strongmanActive = false;
 			GameMasterObject.dannyNetworkEquipPanel.SetActive(true);
 			GameMasterObject.strongmanNetworkEquipPanel.SetActive(false);
 			GameMasterObject.rageMeter.SetActive(false);
@@ -1041,7 +1026,6 @@ public class GameMasterObject : MonoBehaviour
 			GameMasterObject.arSlider.SetActive(true);
 			GameMasterObject.arImage.SetActive(true);
 		}
-		this.textHealth.playerHealth = this.playerHealth;
 	}
 
 	public void GetStrongmanInfo()
@@ -1059,8 +1043,8 @@ public class GameMasterObject : MonoBehaviour
 			this.player = GameMasterObject.strongmanNetwork;
 			GameMasterObject.playerUse = GameMasterObject.strongmanNetwork;
 			this.playerHealth = this.strongmanPlayerHealth;
-			this.textHealth.strongmanActive = true;
-			this.textHealth.dannyActive = false;
+//			this.textHealth.strongmanActive = true;
+//			this.textHealth.dannyActive = false;
 			GameMasterObject.strongmanNetworkEquipPanel.SetActive(true);
 			GameMasterObject.dannyNetworkEquipPanel.SetActive(false);
 			GameMasterObject.rageMeter.SetActive(true);
@@ -1072,7 +1056,6 @@ public class GameMasterObject : MonoBehaviour
 			GameMasterObject.sgImage.SetActive(false);
 			GameMasterObject.sgSlider.SetActive(false);
 		}
-		this.textHealth.playerHealth = this.playerHealth;
 	}
 
 	public void StartHordeWave()
@@ -1119,7 +1102,7 @@ public class GameMasterObject : MonoBehaviour
 
 	public void LevelUp()
 	{		
-		Debug.Log ("level up");
+//		Debug.Log ("level up");
 		if(HUDEXP.currentEXP >= level1 && HUDEXP.currentEXP < level2)
 		{
 			currentLevel = 1;

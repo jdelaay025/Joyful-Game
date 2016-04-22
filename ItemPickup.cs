@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class ItemPickup : MonoBehaviour 
 {
@@ -7,7 +8,7 @@ public class ItemPickup : MonoBehaviour
 	public int gold = 0;
 
 	public int healthBoost;
-
+	public Text armoredUpText;
 	//particle systems for collecting gold
 	public ParticleSystem goldSpray;
 	public ParticleSystem goldShower;
@@ -32,7 +33,6 @@ public class ItemPickup : MonoBehaviour
 	public GameObject shotGun;
 
 	CamShootRL rl;
-
 
 	AssualtRifleRaycast arRC;
 	HandGunRaycast hgRC;
@@ -61,6 +61,14 @@ public class ItemPickup : MonoBehaviour
 		}	
 
 		currentBoost = playerHealth.startingHealth * 5;
+		if(armorUp)
+		{
+			armoredUpText.enabled = true;
+		}
+		else if(!armorUp)
+		{
+			armoredUpText.enabled = false;
+		}
 	}
 
 	void OnTriggerEnter(Collider onIt)

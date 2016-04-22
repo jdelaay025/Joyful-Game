@@ -4,7 +4,7 @@ using System.Collections;
 public class WeaponCameraZoom : MonoBehaviour 
 {
 	public bool zoom = false;
-	public bool zoom2 = false;
+	public bool sniperZoom = false;
 	public bool pushIn = true;
 	float pushinTimer = 0f;
 	Transform myTransform;
@@ -12,6 +12,7 @@ public class WeaponCameraZoom : MonoBehaviour
 	public static bool hasSniperRifle = false;
 	public static bool currentlyUsingSniperRifle = false;
 	public GameObject scopeBlackOut;
+//	public bool editorCheatCode = false;
 
 	void Start () 
 	{
@@ -57,22 +58,22 @@ public class WeaponCameraZoom : MonoBehaviour
 				pushinTimer = .5f;
 			}
 		} 
-		else if (Input.GetAxis ("Aim") > 0 && zoom && hasSniperRifle && !zoom2) 
+		else if (Input.GetAxis ("Aim") > 0 && zoom && hasSniperRifle && !sniperZoom) 
 		{
 			if (Input.GetButtonDown ("Zoom") && pushIn) 
 			{
 				zoom = true;
 				pushinTimer = .5f;
-				zoom2 = true;
+				sniperZoom = true;
 			}
 		} 
-		else if (Input.GetAxis ("Aim") > 0 && zoom && hasSniperRifle && zoom2) 
+		else if (Input.GetAxis ("Aim") > 0 && zoom && hasSniperRifle && sniperZoom) 
 		{
 			if (Input.GetButtonDown ("Zoom") && pushIn) 
 			{
 				zoom = true;
 				pushinTimer = .5f;
-				zoom2 = false;
+				sniperZoom = false;
 				//SetFOV ();
 			}
 		} 
@@ -94,56 +95,55 @@ public class WeaponCameraZoom : MonoBehaviour
 				pushIn = false;
 			}
 		} 
-		else if (Input.GetAxis ("Aim2") > 0 && zoom && !zoom2 && hasSniperRifle && !HUDJoystick_Keyboard.joystickOrKeyboard) 
+		else if (Input.GetAxis ("Aim2") > 0 && zoom && !sniperZoom && hasSniperRifle && !HUDJoystick_Keyboard.joystickOrKeyboard) 
 		{
 			if (Input.GetButtonDown ("Zoom") && pushIn) 
 			{
 				zoom = true;
-				zoom2 = true;
+				sniperZoom = true;
 				pushinTimer = .5f;
 				pushIn = false;
 			}
 		} 
-		else if (Input.GetAxis ("Aim2") > 0 && zoom && zoom2 && hasSniperRifle && !HUDJoystick_Keyboard.joystickOrKeyboard) 
+		else if (Input.GetAxis ("Aim2") > 0 && zoom && sniperZoom && hasSniperRifle && !HUDJoystick_Keyboard.joystickOrKeyboard) 
 		{
 			if (Input.GetButtonDown ("Zoom") && pushIn) 
 			{
 				zoom = true;
-				zoom2 = false;
+				sniperZoom = false;
 				pushinTimer = .5f;
 				//SetFOV ();
 				Debug.Log ("Zoom Out");
 			}
 		}
-		else if(Input.GetAxis("Secondary") < 0 && zoom && zoom2) 
+		else if(Input.GetAxis("Secondary") < 0 && zoom && sniperZoom) 
 		{
 			zoom = false;
-			zoom2 = false;
+			sniperZoom = false;
 			pushIn = true;
 			pushinTimer = 0f;
 		}
-		else if(Input.GetAxis("Secondary2") < 0 && zoom && zoom2 && !HUDJoystick_Keyboard.joystickOrKeyboard) 
+		else if(Input.GetAxis("Secondary2") < 0 && zoom && sniperZoom && !HUDJoystick_Keyboard.joystickOrKeyboard) 
 		{
 			zoom = false;
-			zoom2 = false;
+			sniperZoom = false;
 			pushIn = true;
 			pushinTimer = 0f;
 		}
 		else 
 		{
 			zoom = false;
-			zoom2 = false;
+			sniperZoom = false;
 			pushIn = true;
 			pushinTimer = 0f;
 		}
-
-		if(zoom && !zoom2)
+		if(zoom && !sniperZoom)
 		{
 			SetFOV();
 			scopeBlackOut.SetActive (false);
 			currentlyUsingSniperRifle = false;
 		}
-		else if(zoom && zoom2)
+		else if(zoom && sniperZoom)
 		{
 			SetFOV2();
 			scopeBlackOut.SetActive (true);

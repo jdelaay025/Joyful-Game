@@ -42,6 +42,7 @@ public class TriggerEnemyAttacklv3 : MonoBehaviour
 			blockAi.decoyLife = blockAi.selectTarget.GetComponent<DannyDecoyLifeScript> ();
 			blockAi.playerHealth = null;
 			blockAi.causeDD = null;
+			blockAi.shiftNow = true;
 		}
 
 		if (other.gameObject.tag == "Death Flag") 
@@ -63,6 +64,7 @@ public class TriggerEnemyAttacklv3 : MonoBehaviour
 		{
 			blockAi.playerInRange = true;
 			blockAi.decoyLife = blockAi.selectTarget.GetComponent<DannyDecoyLifeScript> ();
+			blockAi.shiftNow = true;
 		}
 		if (other.gameObject.tag == "Tower Turret") 
 		{
@@ -91,6 +93,7 @@ public class TriggerEnemyAttacklv3 : MonoBehaviour
 			blockAi.playerInRange = false;
 			blockAi.takeDamage = false;
 			blockAi.decoyLife = null;
+			blockAi.shiftNow = false;
 		}
 		if (other.gameObject.tag == "Tower Turret") 
 		{
