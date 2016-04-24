@@ -25,6 +25,7 @@ public class TimerCheckerAi : MonoBehaviour
 	public Renderer rendTag;
 	public bool needDanny = false;
 	public bool needStrongman = false;
+	public bool editorCheatCode = false;
 
 	UserInput userInput;
 	StrongManUserInput sUinput;
@@ -66,6 +67,7 @@ public class TimerCheckerAi : MonoBehaviour
 
 	void Update()
 	{
+		editorCheatCode = HUDToggleCheat.cheatOnOrOff;
 		if(needDanny)
 		{
 			rendTag.material.color = Color.green;
@@ -77,6 +79,25 @@ public class TimerCheckerAi : MonoBehaviour
 
 		targets = GameMasterObject.towerExits;
 		player = GameMasterObject.playerUse;
+
+		if(GameMasterObject.currentLevel >= 4 || editorCheatCode)
+		{
+			if(GameMasterObject.dannyActive && userInput == null)
+			{
+				userInput = player.GetComponent<UserInput> ();
+				sUinput = null;
+				needDanny = true;
+				needStrongman = false;
+			}
+			else if(GameMasterObject.strongmanActive && sUinput == null)
+			{
+				userInput = null;
+				sUinput = player.GetComponent<StrongManUserInput> ();
+				needDanny = false;
+				needStrongman = true;
+			}
+		}
+
 		if(hitchARide)
 		{
 			anim.SetBool ("Hitch", true);		
@@ -118,7 +139,6 @@ public class TimerCheckerAi : MonoBehaviour
 					if (Input.GetButtonDown ("Interact") && hitchARide) 
 					{
 						return;
-
 					}
 				}				
 			}
@@ -220,6 +240,7 @@ public class TimerCheckerAi : MonoBehaviour
 			SpawnEnemies1.totalTimerChecksHome++;
 			Instantiate (tcSpawner, GameMasterObject.timeCheckSpawnPoint.position, transform.rotation );
 			HUDCurrency.currentGold += 500;
+			HUDEXP.currentEXP += 100;
 			HUDCurrency.countDown = 0;
 
 			//myTransform.parent = null;

@@ -4,7 +4,7 @@ using System.Collections;
 public class RocketDamage : MonoBehaviour 
 {
 	public float movementSpeed = 25f;
-	AudioSource sound;
+//	AudioSource sound;
 	public GameObject explosion;
 	public GameObject player;
 	public int m_hitPoints = 3;
@@ -28,7 +28,7 @@ public class RocketDamage : MonoBehaviour
 	void Awake () 
 	{			
 		myTransform = transform;
-		sound = GetComponent<AudioSource>();
+//		sound = GetComponent<AudioSource>();
 		attackDamage = Random.Range(750, 1500);
 		//timer = 10f;
 	}

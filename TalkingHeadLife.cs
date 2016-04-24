@@ -37,6 +37,7 @@ public class TalkingHeadLife : MonoBehaviour
 		rend = GetComponent<Renderer> ();
 
 		regColor = rend.material.color;
+//		SpawnEnemies1.talkingFaceNumbers++;
 	}
 
 	void Update () 
@@ -73,6 +74,8 @@ public class TalkingHeadLife : MonoBehaviour
 		}
 		if(shots >= hitPoints && gameObject.tag == "Mask" && !dead)
 		{
+			SpawnEnemies1.enemyNumberCheck--;
+//			GameMasterObject.enemyCounterNum--;	
 			dead = true;
 
 			//explosion.Play();
@@ -156,4 +159,8 @@ public class TalkingHeadLife : MonoBehaviour
 //			gasCount = false;
 //		}
 //	}
+	void OnDisable()
+	{
+		SpawnEnemies1.talkingFaceNumbers--;
+	}
 }

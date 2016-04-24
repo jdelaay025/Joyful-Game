@@ -10,11 +10,11 @@ public class FreakUOut : MonoBehaviour
 	public int nextColor;
 
 	Renderer rend;
-	Transform myTransform;
+//	Transform myTransform;
 
 	void Awake()
 	{
-		myTransform = transform;
+//		myTransform = transform;
 		rend = GetComponent<Renderer> ();
 	}
 

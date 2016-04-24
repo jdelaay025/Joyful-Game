@@ -51,7 +51,7 @@ public class UserInput : MonoBehaviour
 	public static bool usingPowerwSword = false;
 	public GameObject cameraGO;
 	FreeCameraLook freeCamLook;
-	DannyWeaponScript dannyWeapon;
+//	DannyWeaponScript dannyWeapon;
 	JumpingRaycastDown jumpRC;
 	PlayerHealth1 playerHealth;
 
@@ -59,9 +59,9 @@ public class UserInput : MonoBehaviour
 	public bool faceTarget = false;
 
 	public GameObject lift;
-	LiftScript liftScript;
+//	LiftScript liftScript;
 
-	Animator anim2;
+//	Animator anim2;
 	DoorScript doorScript;
 	public string whichDoor = "";
 
@@ -76,7 +76,7 @@ public class UserInput : MonoBehaviour
 
 	PlayerBowStaff bowAttack , blazeAttack;
 
-	WeaponCameraZoom wZC;
+//	WeaponCameraZoom wZC;
 	public GameObject bowStaffObject;
 	public GameObject blazeSwordObject;
 
@@ -126,16 +126,16 @@ public class UserInput : MonoBehaviour
 		charMove = GetComponent<DannyMovement> ();
 		anim = GetComponent<Animator>();
 		freeCamLook = cameraGO.GetComponent<FreeCameraLook>();
-		dannyWeapon = GetComponent<DannyWeaponScript>();
+//		dannyWeapon = GetComponent<DannyWeaponScript>();
 		jumpRC = GetComponent<JumpingRaycastDown>();
 		shootCounter = 10;
-		if(lift != null)
-		{
-			anim2 = lift.GetComponent<Animator>();
-			liftScript = lift.GetComponent<LiftScript> ();
-		}
+//		if(lift != null)
+//		{
+//			anim2 = lift.GetComponent<Animator>();
+//			liftScript = lift.GetComponent<LiftScript> ();
+//		}
 
-		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
+//		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
 		turnSensitivity = GameMasterObject.turnSpeedNumber;
 		if(bowStaffObject != null)
 		{
@@ -150,10 +150,10 @@ public class UserInput : MonoBehaviour
 	void Update()
 	{		
 		rage = playerHealth.rage;
-		if(liftScript != null)
-		{
-			inLift = liftScript.canMove;
-		}
+//		if(liftScript != null)
+//		{
+//			inLift = liftScript.canMove;
+//		}
 
 		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon ||
 		    Input.GetButton ("Fire2") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard) 

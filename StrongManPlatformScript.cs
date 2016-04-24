@@ -4,7 +4,7 @@ using System.Collections;
 public class StrongManPlatformScript : MonoBehaviour 
 {	
 	bool onSite = false;
-	Transform myTransform;
+//	Transform myTransform;
 	public GameObject cameraObj;
 	public string whichTarget = "";
 	public float ampliture = 3f;
@@ -15,7 +15,7 @@ public class StrongManPlatformScript : MonoBehaviour
 
 	void Awake()
 	{
-		myTransform = transform;
+//		myTransform = transform;
 	}
 	void Start () 
 	{		
@@ -26,7 +26,6 @@ public class StrongManPlatformScript : MonoBehaviour
 
 	void OnCollisionEnter(Collision hitIt)
 	{
-
 		if (hitIt.gameObject.tag == "Player") 
 		{
 			sUinput = hitIt.gameObject.GetComponent<StrongManUserInput> ();

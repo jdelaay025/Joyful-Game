@@ -35,6 +35,8 @@ public class PlayerHealth1 : MonoBehaviour
 	public float rageCount = 0f;
 	public float maxRageCount = 100f;
 	public float rageDrain = 15f;
+	public GameObject dannyDeathFlag;
+	public GameObject strongmanDeathFlag;
 	public GameObject deathFlag;
 	public bool poisoned;
 	public float poisonTimer = 0f;
@@ -46,10 +48,11 @@ public class PlayerHealth1 : MonoBehaviour
 	public Slider rageMeter;
 	public int whichOutfit = 0;
 
-	Animator anim;
-	AudioSource playerAudio;
+//	Animator anim;
+//	AudioSource playerAudio;
 	DannyMovement dannyMovement;
 	StrongManMovement charMove;
+	UserInput userInput;
 	StrongManUserInput sUinput;
 	DannyWeaponScript dannyWeapons;
 
@@ -72,11 +75,12 @@ public class PlayerHealth1 : MonoBehaviour
 
 	void Awake()
 	{
-		anim = GetComponent<Animator>();
-		playerAudio = GetComponent<AudioSource>();
+//		anim = GetComponent<Animator>();
+//		playerAudio = GetComponent<AudioSource>();
 		dannyWeapons = GetComponent<DannyWeaponScript> ();
 		dannyMovement = GetComponent<DannyMovement>();
 		charMove = GetComponent<StrongManMovement> ();
+		userInput = GetComponent<UserInput> ();
 		sUinput = GetComponent<StrongManUserInput>();
 
 		if(displayModel != null)
@@ -104,6 +108,10 @@ public class PlayerHealth1 : MonoBehaviour
 		powerSlider = HUDPowerScript.powerSlider;
 		rageMeter = RageSlider.rageSlider;
 		whichOutfit = HUDOutfitChange.outfitNumber;
+		if(sUinput != null)
+		{
+			sUinput.SetFinalStrikeInactive ();
+		}
 	}
 
 	void Update () 
@@ -156,6 +164,7 @@ public class PlayerHealth1 : MonoBehaviour
 				if(sUinput != null)
 				{
 					sUinput.platformNow = true;
+					sUinput.weaponsHot = false;
 				}
 			}
 			if(Input.GetButtonDown("Melee Weapon") && editorCheatCode || Input.GetButtonDown("Melee Weapon") && editorCheatCode && !HUDJoystick_Keyboard.joystickOrKeyboard)
@@ -164,6 +173,7 @@ public class PlayerHealth1 : MonoBehaviour
 				if(sUinput != null)
 				{
 					sUinput.platformNow = true;
+					sUinput.weaponsHot = false;
 				}
 			}
 
@@ -173,6 +183,7 @@ public class PlayerHealth1 : MonoBehaviour
 				if(sUinput != null)
 				{
 					sUinput.platformNow = true;
+					sUinput.weaponsHot = false;
 				}
 			}
 			else if(Input.GetAxisRaw("Secondary") < 0 && !infiniteRage || Input.GetAxisRaw("Secondary2") < 0 && !infiniteRage && !HUDJoystick_Keyboard.joystickOrKeyboard)
@@ -181,6 +192,7 @@ public class PlayerHealth1 : MonoBehaviour
 				if(sUinput != null)
 				{
 					sUinput.platformNow = true;
+					sUinput.weaponsHot = false;
 				}
 			}
 		}
@@ -192,9 +204,21 @@ public class PlayerHealth1 : MonoBehaviour
 //				Debug.Log ("hit");
 				if(sUinput != null)
 				{
+//					Debug.Log ("hit");
 					sUinput.platformNow = true;
+					sUinput.weaponsHot = false;
 				}
 			}
+//			else if(Input.GetButtonDown("Melee Weapon") && infiniteRage || 
+//				Input.GetButtonDown("Melee Weapon") && infiniteRage && !HUDJoystick_Keyboard.joystickOrKeyboard)
+//			{
+//				//				Debug.Log ("hit");
+//				if(sUinput != null)
+//				{
+//					sUinput.platformNow = true;
+//					sUinput.weaponsHot = false;
+//				}
+//			}
 		}
 
 		dannyActive = GameMasterObject.dannyActive;
@@ -516,21 +540,78 @@ public class PlayerHealth1 : MonoBehaviour
 		{
 			currentHealth = 0;
 		}
+		if(dannyActive)
+		{
+			deathFlag = dannyDeathFlag;
+			Instantiate(deathFlag, transform.position, Quaternion.Euler(Vector3.right + new Vector3(-90f, 0f, 0f)));
+			GameMasterObject.dannysDead = true;
+			if(userInput != null)
+			{
+				if (userInput.objToCarry.activeInHierarchy) 
+				{
+					userInput.objToCarry.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+				if (userInput.objToCarry2.activeInHierarchy) 
+				{
+					userInput.objToCarry2.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+			}
+		}
+		else if(strongmanActive)
+		{
+			GameMasterObject.strongmansDead = true;
+			deathFlag = strongmanDeathFlag;
+			sUinput.SetFinalStrikeInactive ();
+			Instantiate(deathFlag, transform.position, Quaternion.Euler(Vector3.right + new Vector3(-90f, 0f, 0f)));
+			if(sUinput != null)
+			{
+				if (sUinput.objToCarry.activeInHierarchy) 
+				{
+					sUinput.objToCarry.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+				if (sUinput.objToCarry2.activeInHierarchy) 
+				{
+					sUinput.objToCarry2.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+				if (sUinput.objToCarry3.activeInHierarchy) 
+				{
+					sUinput.objToCarry3.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+				if (sUinput.objToCarry4.activeInHierarchy) 
+				{
+					sUinput.objToCarry4.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+				if (sUinput.objToCarry5.activeInHierarchy) 
+				{
+					sUinput.objToCarry5.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+				if (sUinput.objToCarry6.activeInHierarchy) 
+				{
+					sUinput.objToCarry6.SetActive (false);
+					HUDCurrency.currentGold -= 150;
+					HUDEXP.currentEXP += 100;
+				}
+			}
+		}
 		this.gameObject.SetActive (false);
 		if(ragDoll != null)
 		{
 			Instantiate(ragDoll, transform.position, transform.rotation);
 		}
-		if(dannyActive)
-		{
-			Instantiate(deathFlag, transform.position, Quaternion.Euler(Vector3.right + new Vector3(-90f, 0f, 0f)));
-			GameMasterObject.dannysDead = true;
-		}
-		else if(strongmanActive)
-		{
-			GameMasterObject.strongmansDead = true;
-		}
-
 		//playerAudio.clip = deathClip;
 		//playerAudio.Play ();
 
@@ -542,6 +623,7 @@ public class PlayerHealth1 : MonoBehaviour
 		{
 			charMove.enabled = false;
 		}
+
 	}
 
 	public void Respawn()

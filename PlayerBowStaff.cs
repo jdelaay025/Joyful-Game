@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerBowStaff : MonoBehaviour 
 {
-	UserInput userInput;
+//	UserInput userInput;
 	public bool ableToEffect = false;
 	public bool gotHit = false;
 	public AudioSource sounds;
@@ -19,7 +19,7 @@ public class PlayerBowStaff : MonoBehaviour
 	}
 	void Start () 
 	{
-		userInput = GetComponent<UserInput>();
+//		userInput = GetComponent<UserInput>();
 	}
 
 	void OnTriggerEnter(Collider other)

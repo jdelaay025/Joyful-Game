@@ -16,7 +16,7 @@ public class PersistThroughScenes : MonoBehaviour
 	public static bool hasSniperUnlocked = false;
 	public static bool dannyActive = false;
 	public static bool strongmanActive = false;
-
+	public static int currentLevel = 0;
 	public Slider sensitivitySlider;
 	public Toggle isJoyorKeyToggle;
 	public Slider musicSlider;
@@ -103,6 +103,7 @@ public class PersistThroughScenes : MonoBehaviour
 		}
 		currentGold = HUDCurrency.currentGold;
 		currentEXP = HUDEXP.currentEXP;
+		currentLevel = GameMasterObject.currentLevel;
 	}
 	public void ResetAllValues()
 	{

@@ -4,7 +4,7 @@ using System.Collections;
 public class RockNetwork : MonoBehaviour 
 {
 	public float movementSpeed = 25f;
-	AudioSource sound;
+//	AudioSource sound;
 	public GameObject explosion;
 	public int m_hitPoints = 3;
 	public int shots = 0;
@@ -18,7 +18,7 @@ public class RockNetwork : MonoBehaviour
 
 	void Awake () 
 	{
-		sound = GetComponent<AudioSource>();
+//		sound = GetComponent<AudioSource>();
 		attackDamage = Random.Range(125, 350);
 		timer = 10f;
 	}

@@ -22,7 +22,6 @@ public class StrongManUserInput : MonoBehaviour
 
 	private StrongManMovement charMove;
 	public Transform cam;
-	BlockAllySpawn spawnAllyBlock;
 	private Vector3 camForward;
 	private Vector3 move;
 	Animator anim;
@@ -77,16 +76,14 @@ public class StrongManUserInput : MonoBehaviour
 
 	public static bool usingPower = false;
 	public GameObject cameraGO;
-	DannyWeaponScript dannyWeapon;
 	StrongManJumpingRaycast jumpRC;
 
 	public float shootCounter = 10;
 	public bool faceTarget = false;
 	public ParticleSystem rocksBeingPulled;
-	Vector3 falling = new Vector3 (0f, -25f, 0f);
 
-	Animator anim2;
-	DoorScript doorScript;
+//	Animator anim2;
+//	DoorScript doorScript;
 	public string whichDoor = "";
 	public bool rage = false;
 
@@ -97,7 +94,7 @@ public class StrongManUserInput : MonoBehaviour
 
 	public int whichStop;
 
-	WeaponCameraZoom wZC;
+//	WeaponCameraZoom wZC;
 
 	public bool comboHit2 = false;
 	public bool comboHit3 = false;
@@ -165,18 +162,16 @@ public class StrongManUserInput : MonoBehaviour
 		}
 
 		rigidBody = GetComponent<Rigidbody> ();
-		spawnAllyBlock = cam.GetComponent<BlockAllySpawn> ();
 
 		playerHealth = GetComponent<PlayerHealth1> ();
 		charMove = GetComponent<StrongManMovement> ();
 		anim = GetComponent<Animator>();
 		freeCamLook = cameraGO.GetComponent<FreeCameraLook>();
 //		sound = GetComponent<AudioSource> ();
-		dannyWeapon = GetComponent<DannyWeaponScript>();
 		jumpRC = GetComponent<StrongManJumpingRaycast>();
 		shootCounter = 10;
 
-		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
+//		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
 		turnSensitivity = GameMasterObject.turnSpeedNumber;
 
 		fsScript = finalStrike.GetComponent<FinalStrikeForce> ();
@@ -210,9 +205,14 @@ public class StrongManUserInput : MonoBehaviour
 //				target = null;
 			}
 		}
+//		Debug.Log (meleeTimer);
 		if(meleeTimer < 3f)
 		{
 			meleeTimer += Time.deltaTime;
+		}
+		else if(meleeTimer >= 3f)
+		{
+			SetFinalStrikeInactive ();
 		}
 
 		rage = playerHealth.rage;
@@ -232,6 +232,7 @@ public class StrongManUserInput : MonoBehaviour
 				rageSource.PlayOneShot (rageChargeUp);
 				CameraShake.InstanceSM1.ShakeSM1 (amplitude, duration);							
 			}
+
 			if(Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && playerHealth.currentLevel >= 1 ||
 				Input.GetAxisRaw("Primary") < 0 && !GameMasterObject.statusEffect && editorCheatCode)
 			{
@@ -260,7 +261,6 @@ public class StrongManUserInput : MonoBehaviour
 					currentlyShooting = true;
 //					rocksBeingPulled.Stop ();
 					rocksBeingPulled.Play ();
-
 				} 
 				else 
 				{
