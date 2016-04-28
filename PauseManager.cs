@@ -49,6 +49,9 @@ public class PauseManager : MonoBehaviour
 	public static bool getDannyInfo = false;
 	public static bool getDannyCamInfo = false;
 	public static bool getStrongmanInfo = false;
+	public GameObject controlsDisplay;
+	public GameObject dannyDisplay;
+	public GameObject jasonDisplay;
 	public GameObject shotsDisplay;
 	public GameObject potionDisplay;
 	Canvas canvas;
@@ -56,26 +59,36 @@ public class PauseManager : MonoBehaviour
 
 	void Awake()
 	{
-		gameMaster = GameObject.Find (gammaO);	
-		if(gameMaster != null)
+		if (SceneManager.GetActiveScene ().name != "Title Screen") 
 		{
-			gmobj = gameMaster.GetComponent<GameMasterObject> ();
+			gameMaster = GameObject.Find (gammaO);	
+			if(gameMaster != null)
+			{
+				gmobj = gameMaster.GetComponent<GameMasterObject> ();
+			}
 		}
 	}
 
 	void Start () 
 	{
-		shotsDisplay.SetActive (false);
+		Time.timeScale = 1;
+		if(shotsDisplay != null)
+		{
+			shotsDisplay.SetActive (false);
+		}	
 		canvas = GetComponent<Canvas>();
 		canvas.enabled = false;
-		eventSystem.SetActive (false);
-		if(SceneManager.GetActiveScene().name != "CapMultiplayer")
+		if(SceneManager.GetActiveScene().name != "Title Screen")
 		{
-			dannyCameraBase = gmobj.dannyContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
-			dannyShutCameraOff = dannyCameraBase.GetComponent<FreeCameraLook>();
-			shutWeaponsOff = gmobj.danny.GetComponent<DannyWeaponScript>();		
-			strongmanCameraBase = gmobj.strongmanContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
-			strongmanCameraOff = strongmanCameraBase.GetComponent<FreeCameraLook> ();
+			eventSystem.SetActive (false);	
+			if(SceneManager.GetActiveScene().name != "CapMultiplayer")
+			{
+				dannyCameraBase = gmobj.dannyContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
+				dannyShutCameraOff = dannyCameraBase.GetComponent<FreeCameraLook>();
+				shutWeaponsOff = gmobj.danny.GetComponent<DannyWeaponScript>();		
+				strongmanCameraBase = gmobj.strongmanContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
+				strongmanCameraOff = strongmanCameraBase.GetComponent<FreeCameraLook> ();
+			}
 		}
 		else if(SceneManager.GetActiveScene().name == "CapMultiplayer")
 		{
@@ -85,83 +98,55 @@ public class PauseManager : MonoBehaviour
 		musicSlider.enabled = false;
 		quit.enabled = false;
 	}
-	
+	public void OptionsScreen()
+	{
+		canvas.enabled = !canvas.enabled;
+		sfxSlider.enabled = !sfxSlider.enabled;
+		musicSlider.enabled = !musicSlider.enabled;
+		quit.enabled = !quit.enabled;
+		DisableControlsDisplay ();
+		DisableDannyDisplay ();
+		DisableJasonDisplay ();
+	}
 	// Update is called once per frame
 	void Update () 
 	{
-		eventSystem.SetActive (isPaused);
-		if(getDannyCamInfo)
+		if (SceneManager.GetActiveScene ().name != "Title Screen") 
 		{
-			GetDannyCamInfo ();
-			getDannyCamInfo = false;
-		}
-		if(getDannyInfo)
-		{
-			GetDannyInfo ();
-			getDannyInfo = false;
-		}
-		if(getStrongmanInfo)
-		{
-			GetStrongmanInfo ();
-			getStrongmanInfo = false;
-		}
-		if (Input.GetButtonDown("Submit")) 
-		{
-			canvas.enabled = !canvas.enabled;
-			Pause();
-			isPaused = !isPaused;
-			if(dannyShutCameraOff != null)
+			eventSystem.SetActive (isPaused);
+			if (getDannyCamInfo) 
 			{
-				dannyShutCameraOff.enabled = !dannyShutCameraOff.enabled;
-				if(shutWeaponsOff != null)
-				{
-					shutWeaponsOff.enabled = !isPaused;
-				}
+				GetDannyCamInfo ();
+				getDannyCamInfo = false;
 			}
-			if(strongmanCameraOff != null)
+			if (getDannyInfo) 
 			{
-				strongmanCameraOff.enabled = !strongmanCameraOff.enabled;
+				GetDannyInfo ();
+				getDannyInfo = false;
 			}
-			if(GameMasterObject.dannyActive)
+			if (getStrongmanInfo) 
 			{
-				shutWeaponsOff.SetDannyPause ();	
+				GetStrongmanInfo ();
+				getStrongmanInfo = false;
 			}
-			sfxSlider.enabled = !sfxSlider.enabled;
-			musicSlider.enabled = !musicSlider.enabled;
-			quit.enabled = !quit.enabled;
-			DisableShotsDisplay ();
-			DisablePotionDisplay ();
-			/*
-			if(!turretsActive)
-			{
-				continue;
-			}
-			else
-			{
-				mouseLookScripts.enabled = !mouseLookScripts.enabled;
-			}*/
-		}
-
-		if(isPaused)
-		{
-			if(Input.GetButtonDown("Melee"))
+			if (Input.GetButtonDown ("Submit")) 
 			{
 				canvas.enabled = !canvas.enabled;
-				Pause();
+				Pause ();
 				isPaused = !isPaused;
-				if(dannyShutCameraOff != null)
+				if (dannyShutCameraOff != null) 
 				{
 					dannyShutCameraOff.enabled = !dannyShutCameraOff.enabled;
-					if(shutWeaponsOff != null)
+					if (shutWeaponsOff != null) 
 					{
 						shutWeaponsOff.enabled = !isPaused;
 					}
 				}
-				if(strongmanCameraOff != null)
+				if (strongmanCameraOff != null) 
 				{
 					strongmanCameraOff.enabled = !strongmanCameraOff.enabled;
 				}
-				if(GameMasterObject.dannyActive)
+				if (GameMasterObject.dannyActive)
 				{
 					shutWeaponsOff.SetDannyPause ();	
 				}
@@ -170,6 +155,52 @@ public class PauseManager : MonoBehaviour
 				quit.enabled = !quit.enabled;
 				DisableShotsDisplay ();
 				DisablePotionDisplay ();
+				DisableControlsDisplay ();
+				DisableDannyDisplay ();
+				DisableJasonDisplay ();
+				/*
+			if(!turretsActive)
+			{
+				continue;
+			}
+			else
+			{
+				mouseLookScripts.enabled = !mouseLookScripts.enabled;
+			}*/
+			}
+
+			if (isPaused) 
+			{
+				if (Input.GetButtonDown ("Melee")) 
+				{
+					canvas.enabled = !canvas.enabled;
+					Pause ();
+					isPaused = !isPaused;
+					if (dannyShutCameraOff != null) 
+					{
+						dannyShutCameraOff.enabled = !dannyShutCameraOff.enabled;
+						if (shutWeaponsOff != null) 
+						{
+							shutWeaponsOff.enabled = !isPaused;
+						}
+					}
+					if (strongmanCameraOff != null) 
+					{
+						strongmanCameraOff.enabled = !strongmanCameraOff.enabled;
+					}
+					if (GameMasterObject.dannyActive) 
+					{
+						shutWeaponsOff.SetDannyPause ();	
+					}
+					sfxSlider.enabled = !sfxSlider.enabled;
+					musicSlider.enabled = !musicSlider.enabled;
+					quit.enabled = !quit.enabled;
+					DisableShotsDisplay ();
+					DisablePotionDisplay ();
+					DisableControlsDisplay ();
+					DisableDannyDisplay ();
+					DisableJasonDisplay ();
+				}
 			}
 		}
 	}
@@ -202,8 +233,32 @@ public class PauseManager : MonoBehaviour
 	}
 	public void MainMenu()
 	{
-		//Pause ();
+		isPaused = false;
 		SceneManager.LoadScene ("Title Screen");
+	}
+	public void EnableControlsDisplay()
+	{
+		controlsDisplay.SetActive (true);
+	}
+	public void DisableControlsDisplay()
+	{
+		controlsDisplay.SetActive (false);
+	}
+	public void EnableDannyDisplay()
+	{
+		dannyDisplay.SetActive (true);
+	}
+	public void DisableDannyDisplay()
+	{
+		dannyDisplay.SetActive (false);
+	}
+	public void EnableJasonDisplay()
+	{
+		jasonDisplay.SetActive (true);
+	}
+	public void DisableJasonDisplay()
+	{
+		jasonDisplay.SetActive (false);
 	}
 	public void EnableShotsDisplay()
 	{
