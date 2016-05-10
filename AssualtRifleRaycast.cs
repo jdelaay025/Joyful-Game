@@ -48,7 +48,7 @@ public class AssualtRifleRaycast : MonoBehaviour
 	public int legDamage;
 	public int armDamage;
 
-	//UserInput userInput;
+	UserInput userInput;
 	AudioSource[] sounds;
 	//PlayerHealth1 playerHealth;
 	EnemyHealth1 enemyHealth;
@@ -61,13 +61,13 @@ public class AssualtRifleRaycast : MonoBehaviour
 
 	public bool shooting = false;
 
-	public bool reloading = false;
+//	public bool reloading = false;
 	public float reloadTimer = 0f;
 	public float reloadDelay = 3f;
 
 	public GameObject magDrop;
 	public GameObject magDropPoint;
-	public GameObject holdingMag;
+//	public GameObject holdingMag;
 
 	public Vector3 thePostion;	
 	public LayerMask myLayMask;
@@ -79,7 +79,7 @@ public class AssualtRifleRaycast : MonoBehaviour
 
 		anim = player.GetComponent<Animator>();
 
-		//userInput = player.GetComponent<UserInput>();	
+		userInput = player.GetComponent<UserInput>();	
 		//bulletTranform = bulletTracer.transform;
 	}
 
@@ -123,20 +123,22 @@ public class AssualtRifleRaycast : MonoBehaviour
 
 	void Update () 
 	{			
+//		Debug.Log (reloadTimer);
 		//delay = useDelay * Time.deltaTime;
 		attackBooster = HUDDamageBooster.damageAmount;
+		reloadTimer = HUDReloadScript.timer;
 
-		if (reloading) 
-		{
-			if(reloadTimer <= reloadDelay)
-			{
-				reloadTimer += Time.deltaTime;
-			}
-			else
-			{
-				reloading = false;
-			}
-		}
+//		if (reloading) 
+//		{
+//			if(reloadTimer <= reloadDelay)
+//			{
+//				reloadTimer += Time.deltaTime;
+//			}
+//			else
+//			{
+//				reloading = false;
+//			}
+//		}
 
 		ammoSlider.value = clipAmount * 2;
 		if (Input.GetAxisRaw ("Fire") > 0 && counter > delay && clipAmount > 0 && currentAmmo > 0 && reloadTimer >= reloadDelay || 
@@ -156,7 +158,8 @@ public class AssualtRifleRaycast : MonoBehaviour
 			bulletUsed++;
 			
 			HUDARAmmo.currentAmmo = clipAmount;
-			ammoSlider.value = clipAmount * 2;		
+			ammoSlider.value = clipAmount * 2;	
+			userInput.shootCounter = 0;
 		} 
 		if(Input.GetAxisRaw("Fire") <= 0.0f || Input.GetButton ("Fire2") && !HUDJoystick_Keyboard.joystickOrKeyboard)
 		{
@@ -183,26 +186,33 @@ public class AssualtRifleRaycast : MonoBehaviour
 			magDropPoint.SetActive(true);
 		}
 
-		if (reloadTimer >= 0.7f && reloadTimer <= 1.5f) 
-		{
-			holdingMag.SetActive (true);
-		} 
-		else 
-		{
-			holdingMag.SetActive(false);
-		}
+//		if (reloadTimer >= 0.7f && reloadTimer <= 1.5f) 
+//		{
+//			holdingMag.SetActive (true);
+//		} 
+//		else 
+//		{
+//			holdingMag.SetActive(false);
+//		}
 
 		if (currentAmmo > currentClip && clipAmount <= 0) 
 		{
 			AutoReload ();
 		}
 		
-		//if (Input.GetAxis ("Aim2") > 0)
-		//Debug.Log ("aiming");
+		if (userInput.aim) 
+		{
+			maxBulletSpreadAngle = 5;
+		} 
+		else 
+		{
+			maxBulletSpreadAngle = 12;
+		}
 	}
 
 	void FixedUpdate()
 	{
+//		Debug.Log (fireRotation);
 		if (shooting) 
 		{
 			fireTime += Time.deltaTime;
@@ -488,6 +498,7 @@ public class AssualtRifleRaycast : MonoBehaviour
 	void AutoReload()
 	{
 		anim.SetTrigger("Reload");
+		userInput.shootCounter = 10;
 		currentMaxAmmo = currentAmmo;
 		clipAmount = currentAmmo;
 
@@ -506,8 +517,10 @@ public class AssualtRifleRaycast : MonoBehaviour
 		sounds[1].PlayOneShot(reload);
 		//AudioSource.PlayClipAtPoint (reload, transform.position);
 		counter = 0;
-		reloading = true;
-		reloadTimer = 0f;		
+//		reloading = true;
+//		reloadTimer = 0f;	
+		DannyWeaponScript.reloadTimer = 0f;
+		HUDReloadScript.timer = 0f;
 	}
 
 	void Reload()
@@ -515,6 +528,7 @@ public class AssualtRifleRaycast : MonoBehaviour
 		if (Input.GetButtonDown ("Reload") && currentAmmo > 0 && clipAmount < currentClip) 
 		{
 			anim.SetTrigger("Reload");
+			userInput.shootCounter = 10;
 			currentMaxAmmo = currentAmmo;
 			clipAmount = currentAmmo;
 
@@ -533,8 +547,10 @@ public class AssualtRifleRaycast : MonoBehaviour
 			sounds[1].PlayOneShot(reload);
 			//AudioSource.PlayClipAtPoint (reload, transform.position);
 			counter = 0;
-			reloading = true;
-			reloadTimer = 0f;
+//			reloading = true;
+//			reloadTimer = 0f;
+			DannyWeaponScript.reloadTimer = 0f;
+			HUDReloadScript.timer = 0f;
 		}
 	}
 }

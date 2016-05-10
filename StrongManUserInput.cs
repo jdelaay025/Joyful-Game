@@ -127,6 +127,8 @@ public class StrongManUserInput : MonoBehaviour
 	public float shootRotationOffset = 0.5f;
 
 	public GameObject finalStrike;
+	public Slider meleeSLider;
+	public Text meleeText;
 	FinalStrikeForce fsScript;
 	PlayerHealth1 playerHealth;
 	FreeCameraLook freeCamLook;
@@ -185,9 +187,9 @@ public class StrongManUserInput : MonoBehaviour
 		}
 
 		rockThrowPic.color = notEquipedColor;
-		platformPic.color = notEquipedColor;
+		platformPic.color = goColor;
 		ragePic.color = notEquipedColor;
-		nothingUsing.color = goColor;
+		nothingUsing.color = notEquipedColor;
 		targetingSpawnPoint = BulletSpawnSpot.myTransform;
 	}
 
@@ -205,10 +207,20 @@ public class StrongManUserInput : MonoBehaviour
 //				target = null;
 			}
 		}
+//		meleeSLider.value = meleeTimer;
 //		Debug.Log (meleeTimer);
 		if(meleeTimer < 3f)
 		{
 			meleeTimer += Time.deltaTime;
+			meleeSLider.value = meleeTimer;
+			if(meleeTimer < meleeTimerPoint)
+			{
+				meleeText.color = notPurchacedColor;
+			}
+			else
+			{
+				meleeText.color = goColor;
+			}
 		}
 		else if(meleeTimer >= 3f)
 		{
@@ -317,8 +329,9 @@ public class StrongManUserInput : MonoBehaviour
 				}
 			}
 		}
-		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && rage && !aim && noWeapon ||
-			Input.GetButton ("Fire2") && PlayerHealth1.hasPower && rage && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard) 
+		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && rage && !aim && noWeapon
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && rage && !aim && noWeapon
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && rage && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard) 
 		{
 			burst.Play ();
 		} 
@@ -329,7 +342,7 @@ public class StrongManUserInput : MonoBehaviour
 
 		turnSensitivity = GameMasterObject.turnSpeedNumber;
 
-		if (aim && !weaponsHot && meleeTimer >= 1.9f) 
+		if (aim && !weaponsHot && meleeTimer >= meleeTimerPoint) 
 		{
 			anim.SetBool ("GetReady", true);
 			canTrigger = true;
@@ -694,20 +707,22 @@ public class StrongManUserInput : MonoBehaviour
 
 		charMove.Move (move, aim, lookPos);
 
-		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon && !rage && !weaponsHot ||
-			Input.GetButton ("Fire2") && PlayerHealth1.hasPower && !aim && noWeapon && !weaponsHot && !HUDJoystick_Keyboard.joystickOrKeyboard && !rage)
+		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon && !rage && !weaponsHot 
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !weaponsHot && !rage
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !weaponsHot && !HUDJoystick_Keyboard.joystickOrKeyboard && !rage)
 		{
 			anim.SetBool("Dash", true);
 			regDash = true;
 			usingPower = true;
 		}
-		else if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon && rage && !weaponsHot||
-			Input.GetButton ("Fire2") && PlayerHealth1.hasPower && !aim && noWeapon && rage && !weaponsHot && !HUDJoystick_Keyboard.joystickOrKeyboard)
-		{
-			anim.SetBool("RageDash", true);
-			rageDash = true;
-			dashSound.volume = Mathf.Lerp(0, dashVolume, 0.3f);
-		}
+		else if(Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon && rage && !weaponsHot ||
+			     Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && rage && !weaponsHot ||
+			     Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && rage && !weaponsHot && !HUDJoystick_Keyboard.joystickOrKeyboard)
+				{
+					anim.SetBool("RageDash", true);
+					rageDash = true;
+					dashSound.volume = Mathf.Lerp(0, dashVolume, 0.3f);
+				}
 		else 
 		{
 			anim.SetBool("Dash", false);
@@ -745,5 +760,13 @@ public class StrongManUserInput : MonoBehaviour
 	public void ThrowRightRock()
 	{
 		Instantiate (rockToThrow, rightHandSpawn.position, cam.rotation);
+	}
+	void OnEnable()
+	{
+		SetFinalStrikeInactive ();
+	}
+	void OnDisable()
+	{
+		SetFinalStrikeInactive ();
 	}
 }

@@ -56,6 +56,7 @@ public class PauseManager : MonoBehaviour
 	public GameObject potionDisplay;
 	Canvas canvas;
 	public string gammaO = "";
+	CursorLockMode wantedMode;
 
 	void Awake()
 	{
@@ -68,7 +69,10 @@ public class PauseManager : MonoBehaviour
 			}
 		}
 	}
-
+//	void SetCursorState()
+//	{
+//		
+//	}
 	void Start () 
 	{
 		Time.timeScale = 1;
@@ -89,6 +93,8 @@ public class PauseManager : MonoBehaviour
 				strongmanCameraBase = gmobj.strongmanContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
 				strongmanCameraOff = strongmanCameraBase.GetComponent<FreeCameraLook> ();
 			}
+//			sfxSlider.value = PersistThroughScenes.sfxVolume;
+//			musicSlider.value = PersistThroughScenes.musicVolume;
 		}
 		else if(SceneManager.GetActiveScene().name == "CapMultiplayer")
 		{
@@ -97,6 +103,7 @@ public class PauseManager : MonoBehaviour
 		sfxSlider.enabled = false;
 		musicSlider.enabled = false;
 		quit.enabled = false;
+
 	}
 	public void OptionsScreen()
 	{
@@ -111,9 +118,26 @@ public class PauseManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		if (SceneManager.GetActiveScene ().name == "Title Screen") 
+		{
+			wantedMode = CursorLockMode.None;
+			Cursor.lockState = wantedMode;
+			Cursor.visible = true;
+		}
 		if (SceneManager.GetActiveScene ().name != "Title Screen") 
 		{
 			eventSystem.SetActive (isPaused);
+			if (isPaused) 
+			{
+				wantedMode = CursorLockMode.None;
+				Cursor.lockState = wantedMode;
+			}
+			else 
+			{
+//				wantedMode = CursorLockMode.Locked;
+//				Cursor.lockState = wantedMode;
+			}
+//			Cursor.visible = isPaused;
 			if (getDannyCamInfo) 
 			{
 				GetDannyCamInfo ();

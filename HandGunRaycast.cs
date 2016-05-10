@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine;
 
 public class HandGunRaycast : MonoBehaviour 
 {	
@@ -45,7 +46,7 @@ public class HandGunRaycast : MonoBehaviour
 	public int legDamage;
 	public int armDamage;
 	
-	//UserInput userInput;
+	UserInput userInput;
 	//PlayerHealth1 playerHealth;
 	EnemyHealth1 enemyHealth;
 	GameObject[] impacts;
@@ -56,13 +57,13 @@ public class HandGunRaycast : MonoBehaviour
 
 	public bool shooting = false;
 
-	public bool reloading = false;
+//	public bool reloading = false;
 	public float reloadTimer = 0f;
 	public float reloadDelay = 3f;
 
 	public GameObject magDrop;
 	public GameObject magDropPoint;
-	public GameObject holdingMag;
+//	public GameObject holdingMag;
 	public LayerMask myLayerMask;
 	
 	void Awake () 
@@ -71,7 +72,7 @@ public class HandGunRaycast : MonoBehaviour
 		//playerHealth = player.GetComponent<PlayerHealth1>();
 		
 		anim = player.GetComponent<Animator>();
-		//userInput = player.GetComponent<UserInput>();
+		userInput = player.GetComponent<UserInput>();
 		counter = 2;
 
 		reloadTimer = reloadDelay;
@@ -115,6 +116,8 @@ public class HandGunRaycast : MonoBehaviour
 	void Update () 
 	{	
 		hasSniperRifle = WeaponCameraZoom.currentlyUsingSniperRifle;
+		reloadTimer = HUDReloadScript.timer;
+
 		if(!hasSniperRifle)
 		{
 			attackBooster = HUDDamageBooster.damageAmount;
@@ -124,17 +127,17 @@ public class HandGunRaycast : MonoBehaviour
 			attackBooster = 50;
 		}
 
-		if (reloading) 
-		{
-			if(reloadTimer <= reloadDelay)
-			{
-				reloadTimer += Time.deltaTime;
-			}
-			else
-			{
-				reloading = false;
-			}
-		}
+//		if (reloading) 
+//		{
+//			if(reloadTimer <= reloadDelay)
+//			{
+//				reloadTimer += Time.deltaTime;
+//			}
+//			else
+//			{
+//				reloading = false;
+//			}
+//		}
 
 		ammoSlider.value = clipAmount;
 		if (Input.GetAxisRaw ("Fire") > 0 && counter > delay && clipAmount > 0 && currentAmmo > 0 && reloadTimer >= reloadDelay ||
@@ -165,6 +168,7 @@ public class HandGunRaycast : MonoBehaviour
 			
 			HUDHGAmmo.currentAmmo = clipAmount;
 			ammoSlider.value = clipAmount;
+			userInput.shootCounter = 0;
 		}
 		
 		if (Input.GetAxisRaw ("Fire") <= 0 ||
@@ -193,14 +197,14 @@ public class HandGunRaycast : MonoBehaviour
 			magDropPoint.SetActive(true);
 		}
 
-		if (reloadTimer >= 1f && reloadTimer <= 2f) 
-		{
-			holdingMag.SetActive (true);
-		} 
-		else 
-		{
-			holdingMag.SetActive(false);
-		}
+//		if (reloadTimer >= 1f && reloadTimer <= 2f) 
+//		{
+//			holdingMag.SetActive (true);
+//		} 
+//		else 
+//		{
+//			holdingMag.SetActive(false);
+//		}
 
 		if (currentAmmo > currentClip && clipAmount <= 0) 
 		{
@@ -479,7 +483,9 @@ public class HandGunRaycast : MonoBehaviour
 
 	void AutoReload()
 	{		
+		userInput.shootCounter = 10;
 		anim.SetTrigger("Reload");
+
 		currentMaxAmmo = currentAmmo;
 		clipAmount = currentAmmo;
 
@@ -493,8 +499,10 @@ public class HandGunRaycast : MonoBehaviour
 
 		sounds[1].PlayOneShot(reload);
 		counter = -100;
-		reloading = true;
-		reloadTimer = 0f;
+//		reloading = true;
+//		reloadTimer = 0f;
+		DannyWeaponScript.reloadTimer = 0f;
+		HUDReloadScript.timer = 0f;
 	}
 	
 	void Reload()
@@ -502,6 +510,7 @@ public class HandGunRaycast : MonoBehaviour
 		if (Input.GetButtonDown ("Reload") && currentAmmo > 0 && clipAmount < currentClip) 
 		{
 			anim.SetTrigger("Reload");
+			userInput.shootCounter = 10;
 			currentMaxAmmo = currentAmmo;
 			clipAmount = currentAmmo;
 
@@ -515,8 +524,10 @@ public class HandGunRaycast : MonoBehaviour
 			
 			sounds[1].PlayOneShot(reload);
 			counter = -100;
-			reloading = true;
-			reloadTimer = 0f;
+//			reloading = true;
+//			reloadTimer = 0f;
+			DannyWeaponScript.reloadTimer = 0f;
+			HUDReloadScript.timer = 0f;
 		}
 	}
 }

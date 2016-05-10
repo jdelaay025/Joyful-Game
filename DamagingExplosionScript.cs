@@ -29,6 +29,11 @@ public class DamagingExplosionScript : MonoBehaviour
 
 				if (!targetRigidBody) 
 				{
+					AllyDroneScript allyDrone = cols[i].GetComponentInParent<AllyDroneScript>();
+					if(allyDrone != null)
+					{
+						allyDrone.currentPower -= damage;
+					}
 					continue;
 				}
 				targetRigidBody.AddExplosionForce (m_ExplosionForce, transform.position, m_ExplosionRadius, 3f, ForceMode.Impulse);

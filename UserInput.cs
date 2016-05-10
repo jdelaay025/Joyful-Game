@@ -76,7 +76,7 @@ public class UserInput : MonoBehaviour
 
 	PlayerBowStaff bowAttack , blazeAttack;
 
-//	WeaponCameraZoom wZC;
+	WeaponCameraZoom wZC;
 	public GameObject bowStaffObject;
 	public GameObject blazeSwordObject;
 
@@ -135,7 +135,7 @@ public class UserInput : MonoBehaviour
 //			liftScript = lift.GetComponent<LiftScript> ();
 //		}
 
-//		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
+		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
 		turnSensitivity = GameMasterObject.turnSpeedNumber;
 		if(bowStaffObject != null)
 		{
@@ -155,8 +155,9 @@ public class UserInput : MonoBehaviour
 //			inLift = liftScript.canMove;
 //		}
 
-		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon ||
-		    Input.GetButton ("Fire2") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard) 
+		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon 
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard) 
 		{
 			burst.Play ();
 		} 
@@ -164,14 +165,14 @@ public class UserInput : MonoBehaviour
 		{
 			burst.Stop();
 		}
-		if(Input.GetButtonUp("Walk") && !walkByDefault)
+		/*if(Input.GetButtonUp("Walk") && !walkByDefault)
 		{
 			walkByDefault = true;
 		}
 		else if(Input.GetButtonUp("Walk") && walkByDefault)
 		{
 			walkByDefault = false;
-		}
+		}*/
 
 		turnSensitivity = GameMasterObject.turnSpeedNumber;
 	}
@@ -273,12 +274,6 @@ public class UserInput : MonoBehaviour
 			faceTarget = false;
 		}
 
-		if(Input.GetAxis("Fire") > 0 && !aim && !noWeapon || Input.GetButton("Fire2") && !aim && !noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard)
-		{
-			shootCounter = 0;
-		}
-
-
 		if(faceTarget)
 		{
 			//anim.SetBool ("Strafe", true);
@@ -371,6 +366,10 @@ public class UserInput : MonoBehaviour
 				
 				freeCamLook.turnSpeed = turnZoomSpeed * turnSensitivity;
 				freeCamLook.turnSmoothing = 0;
+				if(wZC.weaponEquip || HUDToggleCheat.cheatOnOrOff)
+				{
+					wZC.zoom = true;
+				}
 			}
 
 		}
@@ -428,6 +427,10 @@ public class UserInput : MonoBehaviour
 				
 				freeCamLook.turnSpeed = turnZoomSpeed * turnSensitivity;
 				freeCamLook.turnSmoothing = 0;
+				if(wZC.weaponEquip || HUDToggleCheat.cheatOnOrOff)
+				{
+					wZC.zoom = true;
+				}
 			}
 		}
 
@@ -475,7 +478,8 @@ public class UserInput : MonoBehaviour
 		charMove.Move (move, aim, lookPos);
 
 		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon ||
-		    Input.GetButton ("Fire2") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard)
+			Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon ||
+		    Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard)
 		{
 			anim.SetBool("Dash", true);
 			if(!DannyWeaponScript.blazeSwordActiveNow)

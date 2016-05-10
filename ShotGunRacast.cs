@@ -45,7 +45,7 @@ public class ShotGunRacast : MonoBehaviour
 
 	public float reloadTimer = 0f;
 	public float reloadDelay = 3f;
-	public bool reloading = false;
+//	public bool reloading = false;
 
 	public GameObject player;
 
@@ -54,7 +54,7 @@ public class ShotGunRacast : MonoBehaviour
 	public int legDamage;
 	public int armDamage;
 
-	//UserInput userInput;
+	UserInput userInput;
 	//PlayerHealth1 playerHealth;
 	EnemyHealth1 enemyHealth;
 	GameObject[] impacts;
@@ -73,7 +73,7 @@ public class ShotGunRacast : MonoBehaviour
 		//playerHealth = player.GetComponent<PlayerHealth1>();
 
 		anim = player.GetComponent<Animator>();
-		//userInput = player.GetComponent<UserInput>();
+		userInput = player.GetComponent<UserInput>();
 		counter = 2;
 	}
 
@@ -117,18 +117,19 @@ public class ShotGunRacast : MonoBehaviour
 	void Update () 
 	{	
 		attackBooster = HUDDamageBooster.damageAmount;
+		reloadTimer = HUDReloadScript.timer;
 
-		if (reloading) 
-		{
-			if(reloadTimer <= reloadDelay)
-			{
-				reloadTimer += Time.deltaTime;
-			}
-			else
-			{
-				reloading = false;
-			}
-		}
+//		if (reloading) 
+//		{
+//			if(reloadTimer <= reloadDelay)
+//			{
+//				reloadTimer += Time.deltaTime;
+//			}
+//			else
+//			{
+//				reloading = false;
+//			}
+//		}
 
 		if (pump) 
 		{
@@ -157,6 +158,7 @@ public class ShotGunRacast : MonoBehaviour
 			
 			HUDSGAmmo.currentAmmo = clipAmount;
 			ammoSlider.value = clipAmount;
+			userInput.shootCounter = 0;
 		}
 		
 		if (Input.GetAxisRaw ("Fire") > 0 && clipAmount <= 0 && counter > delay ||
@@ -466,7 +468,9 @@ public class ShotGunRacast : MonoBehaviour
 	}
 
 	void AutoReload()
-	{		
+	{	
+		anim.SetTrigger("Reload");	
+		userInput.shootCounter = 10;
 		currentMaxAmmo = currentAmmo;
 		clipAmount = currentAmmo;
 
@@ -478,14 +482,18 @@ public class ShotGunRacast : MonoBehaviour
 
 		sounds[1].PlayOneShot(reload);
 		counter = 0;
-		reloading = true;
-		reloadTimer = 0f;
+//		reloading = true;
+//		reloadTimer = 0f;
+		DannyWeaponScript.reloadTimer = 0f;
+		HUDReloadScript.timer = 0f;
 	}
 		
 	void Reload()
 	{
 		if (Input.GetButtonDown ("Reload") && currentAmmo > 0 && clipAmount < currentClip) 
 		{
+			anim.SetTrigger("Reload");
+			userInput.shootCounter = 10;
 			currentMaxAmmo = currentAmmo;
 			clipAmount = currentAmmo;
 			
@@ -497,8 +505,10 @@ public class ShotGunRacast : MonoBehaviour
 			
 			sounds[1].PlayOneShot(reload);
 			counter = 0;
-			reloading = true;
-			reloadTimer = 0f;
+//			reloading = true;
+//			reloadTimer = 0f;
+			DannyWeaponScript.reloadTimer = 0f;
+			HUDReloadScript.timer = 0f;
 		}
 	}
 

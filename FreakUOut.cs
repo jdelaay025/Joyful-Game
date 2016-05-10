@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class FreakUOut : MonoBehaviour 
 {
 	public List <Color> colors;
 	public float timeTillChange = 0f;
 	public float timer = 0f;
-	public int nextColor;
+	int nextColor;
 
 	Renderer rend;
 //	Transform myTransform;

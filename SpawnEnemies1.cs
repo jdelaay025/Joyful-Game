@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class SpawnEnemies1 : MonoBehaviour 
 {
@@ -15,6 +18,7 @@ public class SpawnEnemies1 : MonoBehaviour
 	public GameObject enemyNinja;
 	public GameObject mechEnemy;
 	public GameObject blockGunner;
+	public GameObject talkingHead;
 	public GameObject poppy;
 	public GameObject boss1;
 	public GameObject finalBoss;
@@ -34,10 +38,13 @@ public class SpawnEnemies1 : MonoBehaviour
 	public GameObject endWaveDestroyer;
 	public static int mechNumbers;
 	public int mechCapNum = 4;
+	public static int talkingFaceNumbers;
+	public int talkingFaceCapNum = 4;
 	Animator ewdAnim;
 
 	public static int enemyNumber;
 	public static int enemyNumberCheck;
+	public static bool spawnTravelers = false;
 	public float enemyNumberCheckCount;
 	public float spawnTime = 3f;
 	public float spawnTimeLv2 = 15f;
@@ -97,17 +104,65 @@ public class SpawnEnemies1 : MonoBehaviour
 
 	void Start () 
 	{
+//		Debug.Log (spawnTravelers);
 		GetWaveLevels ();
+		#if UNITY_EDITOR
+			if (GameMasterObject.hasPersist) 
+			{
+				spawnTravelers = PersistThroughScenes.saveTravelers;
+			} 
+			else 
+			{
+				spawnTravelers = true;
+			}
+		#else
+			if (GameMasterObject.hasPersist) 
+			{
+			spawnTravelers = PersistThroughScenes.saveTravelers;
+			} 
+			else 
+			{
+			spawnTravelers = false;
+			}
+		#endif
 
 		if (waveNumber != "End Boss") 
 		{
-			lv1num = 2000;
-			lv1numTC = 4;				
-			currentWave = lv1num;
-			currentTCs = lv1numTC;
 			player = GameMasterObject.playerUse;
 			playerHealth = player.GetComponent<PlayerHealth1> ();
-			InvokeRepeating ("TimerCheckSpawn", 25, 7);
+			if (spawnTravelers) 
+			{
+				lv1num = 2000;
+				lv1numTC = 4;				
+				currentWave = lv1num;
+				currentTCs = lv1numTC;
+				lv2num = 2000; 
+				lv3num = 2000; 
+				lv4num = 2000; 
+				lv5num = 2000; 
+				lv6num = 2000;  
+				lv7num = 2000; 
+				lv8num = 2000;  
+				lv9num = 2000; 
+				lv10num = 2000; 
+				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+			} 
+			else 
+			{
+				lv1num = 50;
+				lv1numTC = 4;				
+				currentWave = lv1num;
+				currentTCs = lv1numTC;
+				lv2num = 400; 
+				lv3num = 500; 
+				lv4num = 600; 
+				lv5num = 700; 
+				lv6num = 800;  
+				lv7num = 900; 
+				lv8num = 1000;  
+				lv9num = 1500; 
+				lv10num = 2000; 
+			}
 			InvokeRepeating ("Spawn", 33, spawnTime);
 			InvokeRepeating ("SpawnGunner", 33, 30);
 			nextWaveTimer = 30;
@@ -136,29 +191,30 @@ public class SpawnEnemies1 : MonoBehaviour
 //		lv9num = 200; 
 //		lv10num = 300;
 
-		lv2numTC = 7; 
-		lv3numTC = 10; 
-		lv4numTC = 13; 
-		lv5numTC = 15; 
-		lv6numTC = 15; 
-		lv7numTC = 18;
-		lv8numTC = 20; 
-		lv9numTC = 23; 
-		lv10numTC = 25;
+		lv2numTC = 5; 
+		lv3numTC = 5; 
+		lv4numTC = 11; 
+		lv5numTC = 11; 
+		lv6numTC = 11; 
+		lv7numTC = 11;
+		lv8numTC = 11; 
+		lv9numTC = 17; 
+		lv10numTC = 23;
 
-		lv2num = 2000; 
-		lv3num = 2000; 
-		lv4num = 2000; 
-		lv5num = 2000; 
-		lv6num = 2000;  
-		lv7num = 2000; 
-		lv8num = 2000;  
-		lv9num = 2000; 
-		lv10num = 2000; 
+//		lv2num = 2000; 
+//		lv3num = 2000; 
+//		lv4num = 2000; 
+//		lv5num = 2000; 
+//		lv6num = 2000;  
+//		lv7num = 2000; 
+//		lv8num = 2000;  
+//		lv9num = 2000; 
+//		lv10num = 2000; 
 	}	
 
 	void Update () 
 	{
+//		Debug.Log (spawnTravelers);
 		enemyNumberCheckCount = enemyNumberCheck;
 		HUDEnemyCounter.enemyCounter = totalTimerChecksHome;
 //		Debug.Log (mechNumbers);
@@ -206,14 +262,17 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 2";
 				currentWave = lv2num;
 				currentTCs = lv2numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("SpawnLv2", 33, spawnTimeLv2);
 				InvokeRepeating ("SpawnGunner", 33, 27);
 				InvokeRepeating ("SpawnMech", 33, 30);
 				endSpawn = false;
 				waves [1] = false;
 				startSpawn = false;
-				Debug.Log ("Wave2");
+//				Debug.Log ("Wave2");
 				enemyNumber = 0;
 			}
 			if (waves [2]) 
@@ -224,15 +283,19 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 3";
 				currentWave = lv3num;
 				currentTCs = lv3numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("Spawn", 37, spawnTime);
 				InvokeRepeating ("SpawnLv2", 33, spawnTimeLv2);
+				InvokeRepeating ("SpawnTalkingHead", 33, spawnTime);
 				InvokeRepeating ("SpawnMech", 33, 15);
 				InvokeRepeating ("SpawnGunner", 33, 24);
 				endSpawn = false;
 				waves [2] = false;
 				startSpawn = false;
-				Debug.Log ("Wave3");
+//				Debug.Log ("Wave3");
 				enemyNumber = 0;
 			}
 			if (waves [3]) 
@@ -243,16 +306,19 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 4";
 				currentWave = lv4num;
 				currentTCs = lv4numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
-				InvokeRepeating ("SpawnLv2", 33, spawnTime);
+				InvokeRepeating ("SpawnLv2", 33, spawnTime);			
 				InvokeRepeating ("SpawnNinja", 33, spawnTimeLv2);
 				InvokeRepeating ("SpawnMech", 33, 10);
 				InvokeRepeating ("SpawnGunner", 33, 21);
 				endSpawn = false;
 				waves [3] = false;
 				startSpawn = false;
-				Debug.Log ("Wave4");
+//				Debug.Log ("Wave4");
 				enemyNumber = 0;
 			}
 			if (waves [4]) 
@@ -263,14 +329,17 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 5";
 				currentWave = lv5num;
 				currentTCs = lv5numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
 				InvokeRepeating ("SpawnGunner", 33, 18);
 				endSpawn = false;
 				waves [4] = false;
 				startSpawn = false;
-				Debug.Log ("Wave5");
+//				Debug.Log ("Wave5");
 				enemyNumber = 0;
 			}
 			if (waves [5]) 
@@ -281,7 +350,10 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 6";
 				currentWave = lv6num;
 				currentTCs = lv6numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
 				InvokeRepeating ("SpawnMech", 33, 7);
@@ -290,7 +362,7 @@ public class SpawnEnemies1 : MonoBehaviour
 				endSpawn = false;
 				waves [5] = false;
 				startSpawn = false;
-				Debug.Log ("Wave6");
+//				Debug.Log ("Wave6");
 				enemyNumber = 0;
 			}
 			if (waves [6]) 
@@ -301,6 +373,10 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 7";
 				currentWave = lv7num;
 				currentTCs = lv7numTC;
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("TimerCheckSpawn", 25, 7);
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
@@ -309,7 +385,7 @@ public class SpawnEnemies1 : MonoBehaviour
 				endSpawn = false;
 				waves [6] = false;
 				startSpawn = false;
-				Debug.Log ("Wave7");
+//				Debug.Log ("Wave7");
 				enemyNumber = 0;
 			}
 			if (waves [7]) 
@@ -320,7 +396,10 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 8";
 				currentWave = lv8num;
 				currentTCs = lv8numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
 				InvokeRepeating ("SpawnMech", 33, spawnTimeLv2);
@@ -329,7 +408,7 @@ public class SpawnEnemies1 : MonoBehaviour
 				endSpawn = false;
 				waves [7] = false;
 				startSpawn = false;
-				Debug.Log ("Wave8");
+//				Debug.Log ("Wave8");
 				enemyNumber = 0;
 			}
 			if (waves [8]) 
@@ -340,16 +419,20 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 9";
 				currentWave = lv9num;
 				currentTCs = lv9numTC;
-				InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
+				InvokeRepeating ("SpawnTalkingHead", 40, 7);
 				InvokeRepeating ("SpawnMech", 33, spawnTimeLv2);
 				InvokeRepeating ("SpawnNinja", 33, spawnTime);
 				InvokeRepeating ("SpawnGunner", 33, spawnTime);
 				endSpawn = false;
 				waves [8] = false;
 				startSpawn = false;
-				Debug.Log ("Wave9");
+//				Debug.Log ("Wave9");
 				enemyNumber = 0;
 			}
 			if (waves [9]) 
@@ -360,16 +443,21 @@ public class SpawnEnemies1 : MonoBehaviour
 				waveNumber = "Wave 10";
 				currentWave = lv10num;
 				currentTCs = lv10numTC;
+				if(spawnTravelers)
+				{
+					InvokeRepeating ("TimerCheckSpawn", 25, 7);
+				}
 				InvokeRepeating ("TimerCheckSpawn", 25, 7);
 				InvokeRepeating ("Spawn", 37, spawnTimeLv2);
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
+				InvokeRepeating ("SpawnTalkingHead", 33, 5);
 				InvokeRepeating ("SpawnMech", 33, spawnTime);
 				InvokeRepeating ("SpawnNinja", 33, spawnTime);
 				InvokeRepeating ("SpawnGunner", 33, spawnTime);
 				endSpawn = false;
 				waves [9] = false;
 				startSpawn = false;
-				Debug.Log ("Wave10");
+//				Debug.Log ("Wave10");
 				enemyNumber = 0;
 			}	
 			if (waves [10]) 
@@ -382,6 +470,7 @@ public class SpawnEnemies1 : MonoBehaviour
 				InvokeRepeating ("SpawnLv2", 33, spawnTime);
 				InvokeRepeating ("SpawnMech", 33, spawnTime);
 				InvokeRepeating ("SpawnNinja", 33, spawnTime);
+				InvokeRepeating ("SpawnTalkingHead", 33, spawnTime);
 				InvokeRepeating ("SpawnGunner", 33, spawnTime);
 				endSpawn = false;
 				waves [10] = false;
@@ -396,6 +485,7 @@ public class SpawnEnemies1 : MonoBehaviour
 			ewdAnim.SetTrigger ("Destroy");
 			CancelInvoke ("Spawn");
 			CancelInvoke ("SpawnLv2");
+			CancelInvoke ("SpawnTalkingHead");
 			CancelInvoke ("SpawnMech");
 			CancelInvoke ("TimerCheckSpawn");
 			CancelInvoke ("SpawnNinja");
@@ -540,6 +630,24 @@ public class SpawnEnemies1 : MonoBehaviour
 		GameMasterObject.targets.Add (CreateBlockNinja());
 		enemyNumber += 15;
 	}
+	public Transform CreateTalkingHead()
+	{
+		int spawnPointIndex = Random.Range (0, spawnPoints.Count);
+		GameObject gone = Instantiate (talkingHead, spawnPoints [spawnPointIndex].position, spawnPoints [spawnPointIndex].rotation)as GameObject;
+		return gone.transform;
+	}
+	void SpawnTalkingHead()
+	{
+		if(playerHealth.currentHealth <= 0f || checkEnemyNumber > currentWave || enemyNumberCheck > amountOfEnemies || totalTimerChecksHome > currentTCs || talkingFaceNumbers > talkingFaceCapNum)
+		{
+			return;
+		}
+		//		int spawnPointIndex = Random.Range (0, spawnPoints.Length);
+		//		GameMasterObject.targets.Add (Instantiate (enemyNinja, spawnPoints[spawnPointIndex].position, spawnPoints[spawnPointIndex].rotation)as Transform);
+		GameMasterObject.targets.Add (CreateTalkingHead());
+		enemyNumber += 15;
+		talkingFaceNumbers++;
+	}
 	public Transform CreatMech()
 	{
 		int mechSpawnPoints = Random.Range (0, mechSpawns.Count);
@@ -609,8 +717,7 @@ public class SpawnEnemies1 : MonoBehaviour
 
 	void ActivateMidBoss1()
 	{
-		midBoss1.SetActive (true);
-	
+		midBoss1.SetActive (true);	
 	}
 	void ActivateMidBosses2()
 	{
