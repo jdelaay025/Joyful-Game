@@ -60,7 +60,7 @@ public class PauseManager : MonoBehaviour
 
 	void Awake()
 	{
-		if (SceneManager.GetActiveScene ().name != "Title Screen") 
+		if (SceneManager.GetActiveScene ().name != "Intro Scene")
 		{
 			gameMaster = GameObject.Find (gammaO);	
 			if(gameMaster != null)
@@ -82,24 +82,25 @@ public class PauseManager : MonoBehaviour
 		}	
 		canvas = GetComponent<Canvas>();
 		canvas.enabled = false;
-		if(SceneManager.GetActiveScene().name != "Title Screen")
+		if(SceneManager.GetActiveScene().name != "Intro Scene") 
 		{
-			eventSystem.SetActive (false);	
-			if(SceneManager.GetActiveScene().name != "CapMultiplayer")
-			{
+			//eventSystem.SetActive (false);	
+//			if(SceneManager.GetActiveScene().name != "CapMultiplayer")
+//			{
 				dannyCameraBase = gmobj.dannyContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
 				dannyShutCameraOff = dannyCameraBase.GetComponent<FreeCameraLook>();
 				shutWeaponsOff = gmobj.danny.GetComponent<DannyWeaponScript>();		
 				strongmanCameraBase = gmobj.strongmanContainer.GetComponentInChildren<FreeCameraLook> ().gameObject;
 				strongmanCameraOff = strongmanCameraBase.GetComponent<FreeCameraLook> ();
-			}
+//			}
+//			else if(SceneManager.GetActiveScene().name == "CapMultiplayer")
+//			{
+//				//			Debug.Log ("This is a network game!!!");
+//			}
 //			sfxSlider.value = PersistThroughScenes.sfxVolume;
 //			musicSlider.value = PersistThroughScenes.musicVolume;
 		}
-		else if(SceneManager.GetActiveScene().name == "CapMultiplayer")
-		{
-//			Debug.Log ("This is a network game!!!");
-		}
+
 		sfxSlider.enabled = false;
 		musicSlider.enabled = false;
 		quit.enabled = false;
@@ -118,13 +119,14 @@ public class PauseManager : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (SceneManager.GetActiveScene ().name == "Title Screen") 
+//		Debug.Log (SceneManager.GetActiveScene ().name);
+		if (SceneManager.GetActiveScene ().name == "Intro Scene")
 		{
 			wantedMode = CursorLockMode.None;
 			Cursor.lockState = wantedMode;
 			Cursor.visible = true;
 		}
-		if (SceneManager.GetActiveScene ().name != "Title Screen") 
+		if (SceneManager.GetActiveScene ().name != "Intro Scene")
 		{
 			eventSystem.SetActive (isPaused);
 			if (isPaused) 
@@ -258,7 +260,7 @@ public class PauseManager : MonoBehaviour
 	public void MainMenu()
 	{
 		isPaused = false;
-		SceneManager.LoadScene ("Title Screen");
+		SceneManager.LoadScene ("Intro Scene");
 	}
 	public void EnableControlsDisplay()
 	{

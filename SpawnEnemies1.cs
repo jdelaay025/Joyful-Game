@@ -223,10 +223,10 @@ public class SpawnEnemies1 : MonoBehaviour
 			GameMasterObject.dropTheFat = true;
 			endWaveTimer -= Time.deltaTime;
 		} 
-		else 
-		{
-			GameMasterObject.dropTheFat = false;
-		}
+//		else 
+//		{
+//			GameMasterObject.dropTheFat = false;
+//		}
 
 		if (nextWaveTimer > -1) 
 		{			

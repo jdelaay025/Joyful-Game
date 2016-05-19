@@ -47,6 +47,7 @@ public class PlayerHealth1 : MonoBehaviour
 	public GameObject ragDoll;
 	public Slider rageMeter;
 	public int whichOutfit = 0;
+	public int whichOutfitJason = 0;
 
 //	Animator anim;
 //	AudioSource playerAudio;
@@ -120,6 +121,7 @@ public class PlayerHealth1 : MonoBehaviour
 //		Debug.Log (rageDrain);
 		currentLevel = GameMasterObject.currentLevel;
 		whichOutfit = HUDOutfitChange.outfitNumber;
+		whichOutfitJason = HUDOutfitChangeJason.outfitNumber;
 		editorCheatCode = HUDToggleCheat.cheatOnOrOff;
 		if(GameMasterObject.currentLevel >= 5 && !editorCheatCode)
 		{
@@ -224,67 +226,98 @@ public class PlayerHealth1 : MonoBehaviour
 		dannyActive = GameMasterObject.dannyActive;
 		strongmanActive = GameMasterObject.strongmanActive;
 		if(!dannyActive && strongmanActive)
-		{		
+		{	
 			rageMeter.value = rageCount;
 			if(currentLevel == 0 && !editorCheatCode)
 			{
 				rageDrain = 20;
+				powerUsage = 100;
+				powerGain = 10;
 				infiniteRage = false;
 			}
 			if(currentLevel == 1 && !editorCheatCode)
 			{
 				rageDrain = 18;
+				powerUsage = 100;
+				powerGain = 25;
 				infiniteRage = false;
 			}
 			else if(currentLevel == 2 && !editorCheatCode)
 			{
 				rageDrain = 12;
+				powerUsage = 100;
+				powerGain = 35;
 				infiniteRage = false;
 			}
 			else if(currentLevel == 3 && !editorCheatCode)
 			{
 				rageDrain = 5;
+				powerUsage = 100;
+				powerGain = 50;
 				infiniteRage = false;
 			}
 			else if(currentLevel == 4 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(currentLevel == 5 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(currentLevel == 6 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(currentLevel == 7 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(currentLevel == 8 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(currentLevel == 9 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(currentLevel == 10 && !editorCheatCode)
 			{
+				rageCount = maxRageCount;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			else if(editorCheatCode)
 			{
 				rageCount = 100;
 				rageDrain = 0;
+				powerUsage = 0;
+				powerGain = 0;
 				infiniteRage = true;
 			}
 			if(invulnerable && !rage)
@@ -294,6 +327,7 @@ public class PlayerHealth1 : MonoBehaviour
 			else if(!invulnerable && !rage)
 			{
 				//			rend.material.color = regColor;
+				regMat = possibleMats [whichOutfitJason - 1];
 				rend.material = regMat;
 				rageLight.enabled = false;
 			}
@@ -371,7 +405,8 @@ public class PlayerHealth1 : MonoBehaviour
 		{
 			countPower = (float)startingPower;
 		}
-		if(UserInput.usingPower && hasPower && !DannyWeaponScript.blazeSwordActiveNow || StrongManUserInput.usingPower && hasPower && !rage)
+		if(UserInput.usingPower && hasPower && !DannyWeaponScript.blazeSwordActiveNow && !editorCheatCode || 
+			StrongManUserInput.usingPower && hasPower && !rage && !editorCheatCode)
 		{
 			countPower -= Time.deltaTime * powerUsage;
 		}
@@ -607,6 +642,7 @@ public class PlayerHealth1 : MonoBehaviour
 				}
 			}
 		}
+		HUDEXP.currentEXP += 100;
 		this.gameObject.SetActive (false);
 		if(ragDoll != null)
 		{
@@ -623,7 +659,6 @@ public class PlayerHealth1 : MonoBehaviour
 		{
 			charMove.enabled = false;
 		}
-
 	}
 
 	public void Respawn()
@@ -634,7 +669,7 @@ public class PlayerHealth1 : MonoBehaviour
 			isDead = false;
 			this.gameObject.SetActive (true);
 			currentHealth = startingHealth;
-			currentPower = startingPower;
+			countPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
 			armorHealthSlider.value = currentHealth;
@@ -653,9 +688,10 @@ public class PlayerHealth1 : MonoBehaviour
 		{
 			gameObject.tag = "Player";
 			isDead = false;
+			sUinput.SetFinalStrikeInactive ();
 			this.gameObject.SetActive (true);
 			currentHealth = startingHealth;
-			currentPower = startingPower;
+			countPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
 			armorHealthSlider.value = currentHealth;
@@ -675,11 +711,11 @@ public class PlayerHealth1 : MonoBehaviour
 			gameObject.tag = "Player";
 			isDead = false;
 			this.gameObject.SetActive (true);
-			if(!ItemPickup.armorUp)
+			countPower = startingPower;
+			if(currentHealth < startingHealth)
 			{
 				currentHealth = startingHealth;
 			}
-			currentPower = startingPower;
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
 			armorHealthSlider.value = currentHealth;
@@ -689,7 +725,7 @@ public class PlayerHealth1 : MonoBehaviour
 			poisoned = false;
 			poisonEffects = 1;
 			poisonLeakageTime = 1;
-			dannyWeapons.SetARNow ();
+			//dannyWeapons.SetARNow ();
 		}
 
 		if(strongmanActive)
@@ -697,11 +733,12 @@ public class PlayerHealth1 : MonoBehaviour
 			gameObject.tag = "Player";
 			isDead = false;
 			this.gameObject.SetActive (true);
-			if(!ItemPickup.armorUp)
+			countPower = startingPower;
+			if(currentHealth < startingHealth)
 			{
 				currentHealth = startingHealth;
 			}
-			currentPower = startingPower;
+			sUinput.SetFinalStrikeInactive ();
 			HUDHealthText.currentNumHealth = currentHealth;
 			healthSlider.value = currentHealth;
 			armorHealthSlider.value = currentHealth;
@@ -732,10 +769,15 @@ public class PlayerHealth1 : MonoBehaviour
 	void OnEnable()
 	{
 		this.gameObject.tag = "Player";
+//		if(dannyWeapons != null)
+//		{
+//			dannyWeapons.SetARNow ();	
+//		}
 	}
 	void OnDisable()
 	{
 		this.gameObject.tag = "DEFEATED";
+
 	}
 	public void PlayRageChargeParticle()
 	{

@@ -116,6 +116,25 @@ public class CamRayShooting : MonoBehaviour
 					HUDCurrency.countDown = 0;
 				}
 			}
+			else if(hit.collider.tag == "Death Flag" && GameMasterObject.currentLevel >= 4 || hit.collider.tag == "Death Flag" && HUDToggleCheat.cheatOnOrOff)
+			{
+				sightsColor.color = gunState;
+				sightsCircleColor.color = gunState;
+				ridiculeColor.color = gunState;
+				if(Input.GetButtonUp("Interact"))
+				{
+					if (hit.collider.transform.parent == null) 
+					{
+						Destroy (hit.collider.gameObject);
+					} 
+					else 
+					{
+						Destroy (hit.collider.GetComponentInParent<AllyDroneScript>().gameObject);	
+					}
+
+					HUDEXP.currentEXP += 100;
+				}
+			}
 			else if(hit.collider.tag == "Death")
 			{
 				sightsColor.color = gunState;

@@ -396,7 +396,7 @@ public class StrongManUserInput : MonoBehaviour
 			findEnemyTarget = false;
 			playerHealth.invulnerable = false;
 			upInAir = false;
-			meleeTimer = 0f;
+			meleeTimer = 0.9f;
 		}
 		if(!upInAir)
 		{

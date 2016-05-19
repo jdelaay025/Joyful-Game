@@ -54,6 +54,7 @@ public class GameMasterObject : MonoBehaviour
 
 	public static Color colorToChangeFloor;
 
+	public bool editorCheatCode = false;
 	public static bool hasPersist;
 
 	public static GameObject dCamO;
@@ -234,7 +235,7 @@ public class GameMasterObject : MonoBehaviour
 	[SerializeField]
 	private BlockAllySpawn allySpawn;
 
-	public static int enemyCounterNum;
+//	public static int enemyCounterNum;
 
 	[SerializeField]
 	private int ragdollsPresent = 9;
@@ -409,6 +410,57 @@ public class GameMasterObject : MonoBehaviour
 				this.dannyEquipPanel.SetActive(false);
 			}
 		}
+		else if (SceneManager.GetActiveScene().name == "CapTerrain")
+		{
+			GameMasterObject.isFinalLevel = false;
+			GameMasterObject.isMultiplayer = false;
+			this.strongmanPlayerHealth = this.strongman.GetComponent<PlayerHealth1>();
+			this.dannyCam = this.dannyContainer.GetComponentInChildren<FreeCameraLook>().transform;
+			this.dannyCamObj = this.dannyCam.GetComponentInChildren<Camera>();
+			this.dannyWeaponZoom = this.dannyCamObj.GetComponentInChildren<WeaponCameraZoom>();
+			this.strongmanCam = this.strongmanContainer.GetComponentInChildren<FreeCameraLook>().transform;
+			this.strongmanCamObj = this.strongmanCam.GetComponentInChildren<Camera>();
+			this.strongmanZoom = this.strongmanCamObj.GetComponentInChildren<StrongManWeaponCameraZoom>();
+			if (this.dannyContainer != null)
+			{
+				if (this.danny != null)
+				{
+					this.userInput = this.danny.GetComponent<UserInput>();
+					this.dannyPlayerHealth = this.danny.GetComponent<PlayerHealth1>();
+				}
+				this.allySpawn = this.dannyCamObj.GetComponentInChildren<BlockAllySpawn>();
+			}
+			if (GameMasterObject.dannyActive)
+			{
+				this.dannyContainer.SetActive(true);
+				this.strongmanContainer.SetActive(false);
+				this.player = this.danny;
+				GameMasterObject.playerUse = this.danny;
+				this.playerHealth = this.dannyPlayerHealth;
+				//				this.dTextHealth.dannyActive = true;
+				//				this.dTextHealth.strongmanActive = false;
+				this.strongmanCam.position = this.player.transform.position;
+				this.dannyEquipPanel.SetActive(true);
+				this.strongmanEquipPanel.SetActive(false);
+			}
+			if (this.strongmanContainer != null && this.strongman != null)
+			{
+				this.sUinput = this.strongman.GetComponent<StrongManUserInput>();
+			}
+			if (GameMasterObject.strongmanActive)
+			{
+				this.dannyContainer.SetActive(false);
+				this.strongmanContainer.SetActive(true);
+				this.player = this.strongman;
+				GameMasterObject.playerUse = this.strongman;
+				this.playerHealth = this.strongmanPlayerHealth;
+				//				this.textHealth.strongmanActive = true;
+				//				this.textHealth.dannyActive = false;
+				this.dannyCam.position = this.player.transform.position;
+				this.strongmanEquipPanel.SetActive(true);
+				this.dannyEquipPanel.SetActive(false);
+			}
+		}
 		else if (SceneManager.GetActiveScene().name == "CapNetwork")
 		{
 			GameMasterObject.isFinalLevel = false;
@@ -546,7 +598,9 @@ public class GameMasterObject : MonoBehaviour
 
 	private void Update()
 	{
-//		Debug.Log (currentLevel);
+//		Debug.Log (enemiesToDestroy.Count);
+//		Debug.Log (dropTheFat);
+		editorCheatCode = HUDToggleCheat.cheatOnOrOff;
 		if (this.player != null)
 		{
 			GameMasterObject.playerUse = this.player;
@@ -610,7 +664,7 @@ public class GameMasterObject : MonoBehaviour
 				GameMasterObject.statusEffect = false;
 				this.dannyStatusPanel.SetActive(false);
 			}
-			if (Input.GetButtonDown("Cancel") && !GameMasterObject.isMultiplayer)
+			if (Input.GetButtonDown("Cancel") && !GameMasterObject.isMultiplayer && DannyWeaponScript.reloadTimer >= 2.25f)
 			{
 				GameMasterObject.statusEffect = true;
 				this.switchChars = true;
@@ -642,7 +696,8 @@ public class GameMasterObject : MonoBehaviour
 					this.strongmanStatusPanel.SetActive(false);
 					this.statusTimer = 0f;
 				}
-				else if (Input.GetAxisRaw("Secondary") > 0f)
+				else if (Input.GetAxisRaw("Secondary") > 0f && currentLevel >= 4 ||
+							Input.GetAxisRaw("Secondary") > 0f && editorCheatCode)
 				{
 					if (this.allyCount > 0f)
 					{
@@ -653,7 +708,8 @@ public class GameMasterObject : MonoBehaviour
 					this.strongmanStatusPanel.SetActive(false);
 					this.statusTimer = 0f;
 				}
-				if (this.canPurchase && Input.GetAxisRaw("Primary") < 0f)
+				if (this.canPurchase && Input.GetAxisRaw("Primary") < 0f && currentLevel >= 4 ||
+					this.canPurchase && Input.GetAxisRaw("Primary") < 0f && editorCheatCode)
 				{
 					this.allySpawn.StartShootingRay();
 					this.dannyStatusPanel.SetActive(false);
@@ -718,7 +774,7 @@ public class GameMasterObject : MonoBehaviour
 				GameMasterObject.statusEffect = false;
 				this.strongmanStatusPanel.SetActive(false);
 			}
-			if (Input.GetButtonDown("Cancel") && !GameMasterObject.isMultiplayer)
+			if (Input.GetButtonDown("Cancel") && !GameMasterObject.isMultiplayer && DannyWeaponScript.reloadTimer >= 2.25f)
 			{
 				GameMasterObject.statusEffect = true;
 				this.switchChars = true;
@@ -743,12 +799,13 @@ public class GameMasterObject : MonoBehaviour
 				LevelUp ();
 				if (Input.GetAxis("Primary") > 0f && this.switchChars)
 				{
+					this.statusTimer = 0f;
 					this.SwitchToDan();
 					this.switchChars = false;
 					GameMasterObject.statusEffect = false;
 					this.dannyStatusPanel.SetActive(false);
 					this.strongmanStatusPanel.SetActive(false);
-					this.statusTimer = 0f;
+//					this.statusTimer = 0f;
 				}
 				else if (Input.GetAxisRaw("Primary") < 0f)
 				{
@@ -758,18 +815,24 @@ public class GameMasterObject : MonoBehaviour
 				}
 				else if (Input.GetAxisRaw("Secondary") > 0f)
 				{
+					if (this.allyCount > 0f)
+					{
+						this.RestoreAllies();
+						this.ActivateAllies();
+					}
 					this.dannyStatusPanel.SetActive(false);
 					this.strongmanStatusPanel.SetActive(false);
 					this.statusTimer = 0f;
 				}
 				else if (Input.GetAxis("Primary2") > 0f && this.switchChars && !HUDJoystick_Keyboard.joystickOrKeyboard)
 				{
+					this.statusTimer = 0f;
 					this.SwitchToDan();
 					this.switchChars = false;
 					GameMasterObject.statusEffect = false;
 					this.dannyStatusPanel.SetActive(false);
 					this.strongmanStatusPanel.SetActive(false);
-					this.statusTimer = 0f;
+//					this.statusTimer = 0f;
 				}
 				else if (Input.GetAxisRaw("Primary2") < 0f && !HUDJoystick_Keyboard.joystickOrKeyboard)
 				{
@@ -779,6 +842,11 @@ public class GameMasterObject : MonoBehaviour
 				}
 				else if (Input.GetAxisRaw("Secondary2") > 0f && !HUDJoystick_Keyboard.joystickOrKeyboard)
 				{
+					if (this.allyCount > 0f)
+					{
+						this.RestoreAllies();
+						this.ActivateAllies();
+					}
 					this.dannyStatusPanel.SetActive(false);
 					this.strongmanStatusPanel.SetActive(false);
 					this.statusTimer = 0f;
@@ -858,6 +926,10 @@ public class GameMasterObject : MonoBehaviour
 			for (int j = 0; j < GameMasterObject.enemiesToDestroy.Count - 1; j++)
 			{
 				UnityEngine.Object.Destroy(GameMasterObject.enemiesToDestroy[j]);
+				if (GameMasterObject.enemiesToDestroy[j] == null)
+				{
+					GameMasterObject.enemiesToDestroy.RemoveAt(j);
+				}
 			}
 			for (int k = 0; k < GameMasterObject.timerChecksToDestroy.Count - 1; k++)
 			{
@@ -881,6 +953,11 @@ public class GameMasterObject : MonoBehaviour
 			SpawnEnemies1.enemyNumberCheck = 0;
 			GameMasterObject.timerChecksLostThisWave = 0;
 			LevelUp ();
+			dropTheFat = false;
+		}
+		if(enemiesToDestroy.Count >= 50)
+		{
+			dropTheFat = true;
 		}
 	}
 
@@ -890,6 +967,8 @@ public class GameMasterObject : MonoBehaviour
 		{
 			BlockManAiScript.switchPlayer = true;
 			BlockManAiScript.switchPlayerTimer = 3f;
+			FlyingLionAiScript.switchPlayer = true;
+			FlyingLionAiScript.switchPlayerTimer = 3f;
 			BlockManAiScriptlv2.switchPlayer = true;
 			BlockManNinjaAi.switchPlayer = true;
 			this.dannyContainer.SetActive(true);
@@ -907,6 +986,7 @@ public class GameMasterObject : MonoBehaviour
 			}
 			BlockManAiScript.player = this.danny;
 			BlockManAiScriptlv2.player = this.danny;
+			FlyingLionAiScript.player = this.danny;
 			BlockManNinjaAi.player = this.danny;
 //			this.textHealth.strongmanActive = false;
 			this.dannyEquipPanel.SetActive(true);
@@ -917,6 +997,8 @@ public class GameMasterObject : MonoBehaviour
 		{
 			BlockManAiScript.switchPlayer = true;
 			BlockManAiScript.switchPlayerTimer = 3f;
+			FlyingLionAiScript.switchPlayer = true;
+			FlyingLionAiScript.switchPlayerTimer = 3f;
 			BlockManAiScriptlv2.switchPlayer = true;
 			BlockManNinjaAi.switchPlayer = true;
 			this.playerHealth = this.dannyPlayerHealth;
@@ -931,6 +1013,7 @@ public class GameMasterObject : MonoBehaviour
 				TurnAndShoot.target = GameMasterObject.dannyNetwork.transform;
 			}
 			BlockManAiScript.player = GameMasterObject.dannyNetwork;
+			FlyingLionAiScript.player = GameMasterObject.dannyNetwork;
 			BlockManAiScriptlv2.player = GameMasterObject.dannyNetwork;
 			BlockManNinjaAi.player = GameMasterObject.dannyNetwork;
 //			this.textHealth.strongmanActive = false;
@@ -946,6 +1029,8 @@ public class GameMasterObject : MonoBehaviour
 		{
 			BlockManAiScript.switchPlayer = true;
 			BlockManAiScript.switchPlayerTimer = 3f;
+			FlyingLionAiScript.switchPlayer = true;
+			FlyingLionAiScript.switchPlayerTimer = 3f;
 			BlockManAiScriptlv2.switchPlayer = true;
 			BlockManNinjaAi.switchPlayer = true;
 			this.dannyContainer.SetActive(false);
@@ -962,6 +1047,7 @@ public class GameMasterObject : MonoBehaviour
 				TurnAndShoot.target = this.strongman.transform;
 			}
 			BlockManAiScript.player = this.strongman;
+			FlyingLionAiScript.player = this.strongman;
 			BlockManAiScriptlv2.player = this.strongman;
 			BlockManNinjaAi.player = this.strongman;
 //			this.textHealth.strongmanActive = true;
@@ -976,6 +1062,8 @@ public class GameMasterObject : MonoBehaviour
 		{
 			BlockManAiScript.switchPlayer = true;
 			BlockManAiScript.switchPlayerTimer = 3f;
+			FlyingLionAiScript.switchPlayer = true;
+			FlyingLionAiScript.switchPlayerTimer = 3f;
 			BlockManAiScriptlv2.switchPlayer = true;
 			BlockManNinjaAi.switchPlayer = true;
 			this.playerHealth = this.strongmanPlayerHealth;
@@ -990,6 +1078,7 @@ public class GameMasterObject : MonoBehaviour
 				TurnAndShoot.target = GameMasterObject.strongmanNetwork.transform;
 			}
 			BlockManAiScript.player = GameMasterObject.strongmanNetwork;
+			FlyingLionAiScript.player = GameMasterObject.strongmanNetwork;
 			BlockManAiScriptlv2.player = GameMasterObject.strongmanNetwork;
 			BlockManNinjaAi.player = GameMasterObject.strongmanNetwork;
 //			this.textHealth.strongmanActive = true;

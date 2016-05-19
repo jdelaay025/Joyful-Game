@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class AsyncLoadingSceneButton : MonoBehaviour 
 {
@@ -9,8 +12,10 @@ public class AsyncLoadingSceneButton : MonoBehaviour
 	public string levelToStart;
 	public float waiting = 3f;
 	public Button singleButton;
-	public Button multiButton;
+	public Button hordeButton;
+//	public Button multiButton;
 	public Button optionButton;
+	public Button quitButton;
 	float progressTracker;
 	AsyncOperation async;
 
@@ -22,18 +27,23 @@ public class AsyncLoadingSceneButton : MonoBehaviour
 
 	void Awake()
 	{
-		background.SetActive (false);
+		if(background != null)
+		{
+			background.SetActive (false);
+		}
 	}
-
 	public void GetLoaded()
 	{
 //		if(Time.timeScale > 0)
 //		{
 			PersistThroughScenes.dannyActive = true;
+			PersistThroughScenes.saveTravelers = false;
 			StartCoroutine(DisplayAndLoad (levelToLoad));
 			singleButton.interactable = false;
-			multiButton.interactable = false;
+			hordeButton.interactable = false;
+//			multiButton.interactable = false;
 			optionButton.interactable = false;
+			quitButton.interactable = false;
 //		}
 //		else if(Time.timeScale <= 0)
 //		{
@@ -41,18 +51,48 @@ public class AsyncLoadingSceneButton : MonoBehaviour
 //			SceneManager.LoadScene ("FallIn");
 //		}
 	}
-
+	public void GetTravelersLoaded()
+	{
+		//		if(Time.timeScale > 0)
+		//		{
+		PersistThroughScenes.dannyActive = true;
+		PersistThroughScenes.saveTravelers = true;
+		StartCoroutine(DisplayAndLoad (levelToLoad));
+		singleButton.interactable = false;
+		hordeButton.interactable = false;
+//		multiButton.interactable = false;
+		optionButton.interactable = false;
+		quitButton.interactable = false;
+		//		}
+		//		else if(Time.timeScale <= 0)
+		//		{
+		//			PersistThroughScenes.dannyActive = true;
+		//			SceneManager.LoadScene ("FallIn");
+		//		}
+	}
 	public void GetStarted()
 	{
 		StartCoroutine(DisplayAndStart (levelToStart));
 		singleButton.interactable = false;
-		multiButton.interactable = false;
+		hordeButton.interactable = false;
+//		multiButton.interactable = false;
 		optionButton.interactable = false;
+		quitButton.interactable = false;
 	}
-
+	public void Quit()
+	{
+		#if UNITY_EDITOR
+		EditorApplication.isPlaying = false;
+		#else
+		Application.Quit();
+		#endif
+	}
 	IEnumerator DisplayAndLoad(string level)
 	{
-		background.SetActive (true);
+		if(background != null)
+		{
+			background.SetActive (true);
+		}
 //		progressNum.text = ((int)progressTracker).ToString ();
 //		progressBar.value = progressTracker;
 
@@ -70,7 +110,10 @@ public class AsyncLoadingSceneButton : MonoBehaviour
 	}
 	IEnumerator DisplayAndStart(string level)
 	{
-		background.SetActive (true);
+		if(background != null)
+		{
+			background.SetActive (true);
+		}
 		//		progressNum.text = ((int)progressTracker).ToString ();
 		//		progressBar.value = progressTracker;
 

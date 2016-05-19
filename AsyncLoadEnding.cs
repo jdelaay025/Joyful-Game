@@ -32,7 +32,7 @@ public class AsyncLoadEnding : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if(other.gameObject.tag == "Player" && GameMasterObject.keyNumbers >= 2)
+		if(other.gameObject.tag == "Player" && GameMasterObject.keyNumbers >= 3)
 		{
 			StartCoroutine(DisplayAndLoad (levelToLoad));
 			if(persistScript != null)
