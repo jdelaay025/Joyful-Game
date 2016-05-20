@@ -309,6 +309,9 @@ public class StrongManUserInput : MonoBehaviour
 				platformPic.color = goColor;
 				ragePic.color = notEquipedColor;
 				nothingUsing.color = notEquipedColor;
+				anim.SetBool ("Shoot", false);
+				currentlyShooting = false;
+				rocksBeingPulled.Stop ();
 			}
 			if(weaponsHot)
 			{

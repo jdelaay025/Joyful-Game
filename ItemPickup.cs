@@ -32,8 +32,6 @@ public class ItemPickup : MonoBehaviour
 	public GameObject rocketLauncher;
 	public GameObject shotGun;
 
-	CamShootRL rl;
-
 	AssualtRifleRaycast arRC;
 	HandGunRaycast hgRC;
 	ShotGunRacast sgRC;
@@ -42,8 +40,6 @@ public class ItemPickup : MonoBehaviour
 	{
 		sound = GetComponent<AudioSource>();
 		playerHealth = GetComponent<PlayerHealth1>();
-
-		rl = rocketLauncher.GetComponent<CamShootRL>();
 
 		arRC = assualtRifle.GetComponent<AssualtRifleRaycast>();
 		hgRC = handGun.GetComponent<HandGunRaycast>();
@@ -198,26 +194,26 @@ public class ItemPickup : MonoBehaviour
 			sound.PlayOneShot(arRC.reload, 1);
 		}
 
-		if (onIt.gameObject.tag == "RL Ammo" && rl.currentAmmo < rl.maxAmmo) 
-		{
-			rl.bulletUsed = 0;
-			rl.currentAmmo = rl.maxAmmo;
-			rl.currentMaxAmmo = rl.currentAmmo;
-			rl.currentClip = rl.maxClip;
-			
-			rl.clipAmount = rl.currentAmmo;
-			
-			HUDAmmo.maxAmmo = rl.currentAmmo;
-			if (rl.clipAmount > rl.currentClip)
-			{
-				rl.clipAmount = rl.currentClip;
-			}
-			HUDAmmo.currentAmmo = rl.clipAmount;
-			HUDAmmo.clip = rl.clipAmount;
-			
-			
-			sound.PlayOneShot (rl.reload);			
-		}
+//		if (onIt.gameObject.tag == "RL Ammo" && rl.currentAmmo < rl.maxAmmo) 
+//		{
+//			rl.bulletUsed = 0;
+//			rl.currentAmmo = rl.maxAmmo;
+//			rl.currentMaxAmmo = rl.currentAmmo;
+//			rl.currentClip = rl.maxClip;
+//			
+//			rl.clipAmount = rl.currentAmmo;
+//			
+//			HUDAmmo.maxAmmo = rl.currentAmmo;
+//			if (rl.clipAmount > rl.currentClip)
+//			{
+//				rl.clipAmount = rl.currentClip;
+//			}
+//			HUDAmmo.currentAmmo = rl.clipAmount;
+//			HUDAmmo.clip = rl.clipAmount;
+//			
+//			
+//			sound.PlayOneShot (rl.reload);			
+//		}
 
 		if (onIt.gameObject.tag == "SG Ammo" && sgRC.currentAmmo < sgRC.maxAmmo) 
 		{			
