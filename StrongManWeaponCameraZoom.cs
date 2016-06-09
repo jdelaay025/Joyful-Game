@@ -4,6 +4,7 @@ using System.Collections;
 public class StrongManWeaponCameraZoom : MonoBehaviour 
 {
 	public bool zoom = false;
+	public bool rageDash = false;
 //	Transform myTransform;
 
 	void Start () 
@@ -55,6 +56,10 @@ public class StrongManWeaponCameraZoom : MonoBehaviour
 		{
 			SetFOVBack();
 		}
+		if(rageDash)
+		{
+			SetDashFOV ();
+		}
 	}
 
 	void SetFOV()
@@ -66,6 +71,11 @@ public class StrongManWeaponCameraZoom : MonoBehaviour
 	void SetFOVBack()
 	{
 		Camera.main.fieldOfView = Mathf.Lerp (Camera.main.fieldOfView, 60, Time.deltaTime / .1f); 
+		//Camera.main.fieldOfView = 60;
+	}
+	void SetDashFOV()
+	{
+		Camera.main.fieldOfView = Mathf.Lerp (Camera.main.fieldOfView, 100, Time.deltaTime / .1f); 
 		//Camera.main.fieldOfView = 60;
 	}
 }

@@ -5,6 +5,7 @@ public class WeaponCameraZoom : MonoBehaviour
 {
 	public bool zoom = false;
 	public bool sniperZoom = false;
+	public bool rageDash = false;
 	public bool pushIn = true;
 	float pushinTimer = 0f;
 	Transform myTransform;
@@ -155,6 +156,10 @@ public class WeaponCameraZoom : MonoBehaviour
 			scopeBlackOut.SetActive (false);
 			currentlyUsingSniperRifle = false;
 		}
+		if(rageDash)
+		{
+			SetDashFOV ();
+		}
 	}
 
 	void SetFOV()
@@ -171,6 +176,11 @@ public class WeaponCameraZoom : MonoBehaviour
 	void SetFOVBack()
 	{
 		Camera.main.fieldOfView = Mathf.Lerp (Camera.main.fieldOfView, 60, Time.deltaTime / .1f); 
+		//Camera.main.fieldOfView = 60;
+	}
+	void SetDashFOV()
+	{
+		Camera.main.fieldOfView = Mathf.Lerp (Camera.main.fieldOfView, 150, Time.deltaTime / .02f); 
 		//Camera.main.fieldOfView = 60;
 	}
 }

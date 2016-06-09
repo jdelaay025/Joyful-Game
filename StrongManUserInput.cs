@@ -94,7 +94,7 @@ public class StrongManUserInput : MonoBehaviour
 
 	public int whichStop;
 
-//	WeaponCameraZoom wZC;
+	StrongManWeaponCameraZoom wZC;
 
 	public bool comboHit2 = false;
 	public bool comboHit3 = false;
@@ -173,7 +173,7 @@ public class StrongManUserInput : MonoBehaviour
 		jumpRC = GetComponent<StrongManJumpingRaycast>();
 		shootCounter = 10;
 
-//		wZC = cameraGO.GetComponentInChildren<WeaponCameraZoom>();
+		wZC = cameraGO.GetComponentInChildren<StrongManWeaponCameraZoom>();
 		turnSensitivity = GameMasterObject.turnSpeedNumber;
 
 		fsScript = finalStrike.GetComponent<FinalStrikeForce> ();
@@ -723,6 +723,7 @@ public class StrongManUserInput : MonoBehaviour
 			     Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && rage && !weaponsHot && !HUDJoystick_Keyboard.joystickOrKeyboard)
 				{
 					anim.SetBool("RageDash", true);
+//					wZC.rageDash = true;
 					rageDash = true;
 					dashSound.volume = Mathf.Lerp(0, dashVolume, 0.3f);
 				}
@@ -730,6 +731,7 @@ public class StrongManUserInput : MonoBehaviour
 		{
 			anim.SetBool("Dash", false);
 			anim.SetBool ("RageDash", false);
+//			wZC.rageDash = false;
 			regDash = false;
 			rageDash = false;
 			usingPower = false;

@@ -27,7 +27,10 @@ public class AsyncLoadEnding : MonoBehaviour
 	}
 	void Start()
 	{
-		background.SetActive (false);
+		if(background != null)
+		{
+			background.SetActive (false);
+		}
 	}
 
 	void OnTriggerEnter(Collider other)
@@ -46,7 +49,10 @@ public class AsyncLoadEnding : MonoBehaviour
 
 	IEnumerator DisplayAndLoad(string level)
 	{
-//		background.SetActive (true);
+//		if(background != null)
+//		{
+//			background.SetActive (true);
+//		}		
 //		progressNum.text = ((int)progressTracker).ToString ();
 //		progressBar.value = progressTracker;
 		AsyncOperation async = SceneManager.LoadSceneAsync (level);

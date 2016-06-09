@@ -59,7 +59,10 @@ public class TriggerEnemyAttack : MonoBehaviour
 		if (other.gameObject.tag == "TimerCheck") 
 		{
 			blockAi.playerInRange = true;
-			blockAi.timerCheckHealth = blockAi.selectTarget.GetComponent<TimerCheckHealth> ();
+			if (blockAi.timerCheckHealth == null) 
+			{
+				blockAi.timerCheckHealth = blockAi.selectTarget.GetComponent<TimerCheckHealth> ();
+			}
 		}
 		if (other.gameObject.tag == "Ally") 
 		{

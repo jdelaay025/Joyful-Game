@@ -9,14 +9,15 @@ public class PersistThroughScenes : MonoBehaviour
 	public static string userName = "";
 	public static bool isJoystick = true;
 	public static float repTurnSensitivity = 1f;
-	public static float musicVolume = 0f;
-	public static float sfxVolume = 0f;
+	public static float musicVolume = -35f;
+	public static float sfxVolume = -10f;
 	public static float currentGold = 0f;
 	public static float currentEXP = 0f;
 	public static bool hasSniperUnlocked = false;
 	public static bool dannyActive = false;
 	public static bool strongmanActive = false;
 	public static int currentLevel = 0;
+	public static bool saveTravelers = false;
 	public Slider sensitivitySlider;
 	public Toggle isJoyorKeyToggle;
 	public Slider musicSlider;
@@ -104,6 +105,8 @@ public class PersistThroughScenes : MonoBehaviour
 		currentGold = HUDCurrency.currentGold;
 		currentEXP = HUDEXP.currentEXP;
 		currentLevel = GameMasterObject.currentLevel;
+		sfxVolume = sxfSlider.value;
+		musicVolume = musicSlider.value;
 	}
 	public void ResetAllValues()
 	{
