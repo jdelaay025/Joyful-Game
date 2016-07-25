@@ -88,6 +88,7 @@ public class UserInput : MonoBehaviour
 	public bool inLift = false;
 	public AudioSource dashSound;
 	public float dashVolume = 0f;
+	public bool narrator = false;
 
 	void Awake ()
 	{
@@ -148,16 +149,17 @@ public class UserInput : MonoBehaviour
 	}
 
 	void Update()
-	{		
+	{	
+		narrator = HUDNarratorScript.narratorOnOrOff;	
 		rage = playerHealth.rage;
 //		if(liftScript != null)
 //		{
 //			inLift = liftScript.canMove;
 //		}
 
-		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon 
-			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon
-			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard) 
+		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon && !narrator 
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !narrator
+			|| Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard && !narrator) 
 		{
 			burst.Play ();
 		} 
@@ -475,11 +477,18 @@ public class UserInput : MonoBehaviour
 
 		move *= walkMultiplier;
 
-		charMove.Move (move, aim, lookPos);
+		if(!narrator)
+		{
+			charMove.Move (move, aim, lookPos);
+		}
+		else if(narrator)
+		{
+			charMove.Move(Vector3.zero, aim, lookPos);
+		}
 
-		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon ||
-			Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon ||
-		    Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard)
+		if (Input.GetAxis ("Fire") > 0 && PlayerHealth1.hasPower && !aim && noWeapon && !narrator||
+			Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !narrator||
+			Input.GetButton ("Sprint") && PlayerHealth1.hasPower && !aim && noWeapon && !HUDJoystick_Keyboard.joystickOrKeyboard && !narrator)
 		{
 			anim.SetBool("Dash", true);
 			if(!DannyWeaponScript.blazeSwordActiveNow)
@@ -537,7 +546,7 @@ public class UserInput : MonoBehaviour
 			blazeAttack.gotHit = false;
 		}
 
-		if(Input.GetButtonDown("Melee") && ableToAttack && meleeEnabled)
+		if(Input.GetButtonDown("Melee") && ableToAttack && meleeEnabled && !narrator)
 		{
 			anim.SetInteger("Weapons", -1);
 			anim.SetTrigger("Attack");
@@ -547,7 +556,7 @@ public class UserInput : MonoBehaviour
 			comboHit2 = true;
 		}
 
-		if (Input.GetButtonDown ("Melee") && !ableToAttack && meleeEnabled && meleeTimer >= 0.2f) 
+		if (Input.GetButtonDown ("Melee") && !ableToAttack && meleeEnabled && meleeTimer >= 0.2f && !narrator) 
 		{
 			anim.SetTrigger ("ComboLvl1");
 			meleeTimer = .8f;
